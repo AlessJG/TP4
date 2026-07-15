@@ -1,11 +1,15 @@
-import java.util.Scanner;
+import java.io.*;
+import java.time.*;
+import java.util.*;
 
 public class Calendrier {
-	//a sa creation, lit un fichier calendrier avec 
+	//format fichier calendrierXX.CSV -- ou XX est le numero du mois
+	//Date, estIndispo, heure1, heure2, heure3, ...
+	//1, true, 12h00, 14h00, ...
 	private int annee;
 	private int mois;
-	private Scanner sc;
-	private int[] datesDisponibles;
+	private int nbJours;
+	private ArrayList<Date> dates;
 	//moniteur fourni dates indisponibles
 	//peut aussi rendre dates redisponible
 	//si jour indisponible alors pas affiche
@@ -14,69 +18,57 @@ public class Calendrier {
 	//1.comparer avec date auj pour sassurer que ne pas essaye de inscrire a date passee
 	//2.sassurer que n'essaie pas de s'inscrire a date inexistante (ex 0, -, passer max)
 	//3.sassurer que n'essaie pas de s'sinscrire a date indisponible
+	
+	
+	public Calendrier(Clock horloge) {
+		/*ArrayList<String[]> indispos = AutoEcole.lireCSV("./CSV/calendrier/calendrier" + 
+										 LocalDate.now(horloge).getMonth() + ".CSV");
+		
+		dates = new ArrayList<Date>();*/
+		this.nbJours = LocalDate.now(horloge).getMonth().length(LocalDate.now(horloge).isLeapYear());
+		
+		/*for(int i = 0; i<nbJours; i++) {
+			Date date = new Date();
+			
+			String[] ligne = indispos.get(i);
+			if(ligne[1].equals("true")) {
+				date.rendreIndispo();
+			}
+			
+			for(int j = 0; j<ligne.length; j++) {
+				try {
+					date.ajouterIndispo(ligne[j + 2]);
+				}
+				catch(Exception e) {
+					break;
+				}
+			}
+						
+			this.dates.add(date);
+		}*/
+	}
+	
+	public String getDisponibilites(Clock horloge) {
+		
+		
+		
+		return null;
+	}
 
-    public void afficherCalendrier() {
-    	sc = new Scanner(System.in);
-
-        System.out.print("Entrer l'année voulue: ");
-        annee = sc.nextInt();
-
-
-        System.out.print("Entrer le mois voulu: ");
-        mois = sc.nextInt();
-
-        int date = 1;
-        int m = 1;
-        int a = 1;
+    public void afficherCalendrierMois() {
+    	//corriger erreur de formattage
+    	
+    	Clock horloge = Clock.systemUTC();
+    	annee = LocalDate.now(horloge).getYear();
+		mois = LocalDate.now(horloge).getMonthValue();
+		
         int j = 1;
 
         String jours[] = {"DIM", "LUN", "MAR", "MER", "JEU", "VEN", "SAM"};
         String nomMois[] = {"JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET",
         					"AOUT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE"};
 
-        int nbJours[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-        while (true) {
-
-            if (date == 1 && mois == m && annee == a) {
-                break;
-            }
-
-            if (a % 4 == 0 && a % 100 != 0 || a % 100 == 0) {
-                nbJours[1] = 29;
-            }
-
-            else {
-                nbJours[1] = 28;
-            }
-            j++;
-            date++;
-
-            if (date > nbJours[mois - 1]) {
-                mois++;
-                date = 1;
-            }
-
-            if (mois > 12) {
-                mois = 1;
-                a++;
-            }
-
-            if (j == 7) {
-                j = 0;
-            }
-        }
-
-        int c = j;
-
-        if (a % 4 == 0 && a % 100 != 0 || a % 400 == 0) {
-            nbJours[1] = 29;
-        }
-        else {
-            nbJours[1] = 28;
-        }
-
-        System.out.println("MOIS:" + nomMois[m - 1]);
+        System.out.println("MOIS:" + nomMois[mois - 1]);
 
         for (int k = 0; k < 7; k++) {
             System.out.print("   " + jours[k]);
@@ -84,29 +76,43 @@ public class Calendrier {
 
         System.out.println();
 
-        for (int i = 1; i <= (nbJours[m - 1] + j); i++) {
-            if (i > 6) {
-                j = j % 6;
-            }
-        }
-
         int espaces = j;
         if (espaces < 0) {
             espaces = 6;
         }
 
-        for (int i = 0; i < espaces; i++)
+        for (int i = 0; i < espaces; i++) {
             System.out.print("      ");
-        for (int i = 1; i <= nbJours[m - 1]; i++) {
+        }
+        
+        int c = 1;
+        
+        for (int i = 1; i <= nbJours; i++) {
             System.out.printf(" %4d ", i);
 
-            if (((i + espaces) % 7 == 0)
-                || (i == nbJours[m - 1]))
+            if (((i + espaces) % 7 == 0) || (i == nbJours)) {
+            	System.out.printf("%4s", "(" + c + ")");
                 System.out.println();
+                c++;
+            }
         }
     }
+    
+    public void afficherCalendrierSemaine() {
+    	
+    }
+    
+    public void deleteFile(String fichier) {
+    	File file = new File(fichier); 
+        if (!(file.delete())) { 
+          System.out.println("Erreur du système: le fichier " + fichier + 
+        		  			 " n'a pas pu être supprimé.");
+        }
+    }
+    
     public static void main(String args[]) {
-    	Calendrier cal = new Calendrier();
-    	cal.afficherCalendrier();
+    	Calendrier cal = new Calendrier(Clock.systemUTC());
+    	cal.afficherCalendrierMois();
     }
 }
+//System.out.printf("Hey there! Just a reminder that I love you! <3");
