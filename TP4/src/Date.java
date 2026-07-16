@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Date {
 	
-	private HashMap<LocalTime, Duration> heuresIndispo; //liste des créneaux d'indisponibilités de la journée (heure de debut, duree)
+	private LinkedHashMap<LocalTime, Duration> heuresIndispo; //liste des créneaux d'indisponibilités de la journée (heure de debut, duree)
 	private boolean estIndispo; //est true si la date est complètement indisponible, sinon false
 	private int jour; //la valeur du jour du mois
 	
@@ -12,7 +12,7 @@ public class Date {
 	 * @param jour, la valeur du jour du mois 
 	 */
 	public Date(int jour) {
-		this.heuresIndispo = new HashMap<LocalTime, Duration>();
+		this.heuresIndispo = new LinkedHashMap<LocalTime, Duration>();
 		this.estIndispo = false;
 		this.jour = jour;
 	}
@@ -64,7 +64,7 @@ public class Date {
 	 * Fonction qui sert d'accesseur au HashMap "heuresIndispo"
 	 * @return this.heuresIndispo
 	 */
-	public HashMap<LocalTime, Duration> getCreneauIndispo(){
+	public LinkedHashMap<LocalTime, Duration> getCreneauIndispo(){
 		return this.heuresIndispo;
 	}
 	
@@ -73,39 +73,59 @@ public class Date {
 	 * une liste au format (heure de début, durée), puis retourne cette liste 
 	 * @return heuresDispo, la liste des créneaux de disponibilités
 	 */
-	//puisque heures oueverture = 12PM-8PM and min lecon = 1h
-	public HashMap<LocalTime, Duration> getCreneauDispo(){
-		HashMap<LocalTime, Duration> heuresDispo = new HashMap<LocalTime, Duration>();
+	//puisque heures oueverture = 12PM-8PM and min lecon = 1h + 15 min entre chaque eleves
+	public LinkedHashMap<LocalTime, Duration> getCreneauDispo(){
+		LinkedHashMap<LocalTime, Duration> heuresDispo = new LinkedHashMap<LocalTime, Duration>();
 
 		int i = 0;
 		LocalTime previous = null;
-		for (LocalTime debut : this.heuresIndispo.keySet()) {
-			LocalTime fin = debut.plus(this.heuresIndispo.get(debut));
+
+		if(this.heuresIndispo.isEmpty()) {
+			heuresDispo.put(LocalTime.parse("12:00"), Duration.ofHours(8));
+			return heuresDispo;
+		}
+		for (LocalTime h : this.heuresIndispo.keySet()) {
 			
-			if (i == 0) {
-				LocalTime ouverture = LocalTime.parse("12:00PM");
-				Duration temps = Duration.between(ouverture, debut);
-				if(temps.compareTo(Duration.ofMinutes(75)) >= 0) {
-					heuresDispo.put(ouverture, temps);
-				}
-			}
-			else if(i == this.heuresIndispo.size() - 1) {
-				LocalTime fermeture = LocalTime.parse("8:00PM");
-				Duration temps = Duration.between(debut, fermeture);
-				if(temps.compareTo(Duration.ofMinutes(75)) >= 0) {
-					heuresDispo.put(fermeture, temps);
-				}
-			}
-			else {
-				Duration temps = Duration.between(previous, debut);
-				if(temps.compareTo(Duration.ofMinutes(75)) >= 0) {
+			LocalTime fin = h.plus(this.heuresIndispo.get(h));
+			
+			if(previous != null) {
+				Duration temps = Duration.between(previous, h);
+				if(temps.toMinutes() >= 75) {
 					heuresDispo.put(previous, temps);
 				}
 			}
-			previous = debut;
+			
+			if (i == 0) {
+				LocalTime ouverture = LocalTime.parse("12:00");
+				Duration temps = Duration.between(ouverture, h);
+				if(temps.toMinutes() >= 75) {
+					heuresDispo.put(ouverture, temps);
+				}
+			}
+			else if(i == (this.heuresIndispo.keySet().size()) - 1) {
+				LocalTime fermeture = LocalTime.parse("20:00");
+				Duration temps = Duration.between(fin, fermeture);
+				if(temps.toMinutes() >= 60) {
+					heuresDispo.put(fin, temps);
+				}
+			}
+			
+			previous = fin;
 			i++;
 		}
 		
 		return heuresDispo;
+	}
+	
+	@Override
+	public String toString() {
+		String s = "";
+		HashMap<LocalTime, Duration> heuresDispo = this.getCreneauDispo();
+		for(LocalTime h : heuresDispo.keySet()) {
+			s += "De: " + h.toString() + "\njusqu'à";
+			LocalTime heureFin = h.plus(heuresDispo.get(h));
+			s += "\n" + heureFin.toString() + "\n\n";
+		}
+		return s;
 	}
 }
