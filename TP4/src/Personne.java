@@ -1,13 +1,20 @@
-import java.time.LocalDate;
+import java.time.*;
 
 public abstract class Personne {
-	private String nom;
-	private String prenom;
-	private String adresse;
-	private int numTelephone;
-	private String motDePasse;
+	private String nom; //le nom de la personne
+	private String prenom; //le prénom de la personne
+	private String adresse; //l'adresse de la personne
+	private int numTelephone; //le numéro de téléphone de la personne
+	private String motDePasse; //le mot de passe de la personne
 	
-	//constructeur
+	/**
+	 * Constructeur de la classe, initialise les variables globales
+	 * @param nom
+	 * @param prenom
+	 * @param adresse
+	 * @param numTelephone
+	 * @param motDePasse
+	 */
 	public Personne(String nom, String prenom, String adresse, int numTelephone, String motDePasse) {
 		this.nom = nom;
 		this.prenom = prenom;

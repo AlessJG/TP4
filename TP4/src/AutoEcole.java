@@ -3,11 +3,14 @@ import java.time.*;
 import java.util.*;
 
 public class AutoEcole {
-	static Scanner scanner = new Scanner(System.in);
-	private ArrayList<Eleve> eleves;
+	static Scanner scanner = new Scanner(System.in); //le scanner de la classe
+	private ArrayList<Eleve> eleves; //la liste de tous les eleves inscrit à l'auto-école
 
-	//Fonction qui permet de lire les entrées des utilisateurs et qui quit l'application dès que 'Q'
-	//est entré.
+	/**
+	 * Fonction qui permet de lire les entrées des utilisateurs et qui quit l'application dès que 'Q'
+	 * est entré.
+	 * @return input, l'entrée de l'utilisateur
+	 */
     public static String getInput() {
         String input = scanner.nextLine().trim();
 
@@ -23,22 +26,42 @@ public class AutoEcole {
 		System.out.println("Tests getInput()");
 	}
     
+    /**
+     * Fonction qui sert à lire un fichier CSV. La liste retournée contient des tableaux de String 
+     * et chacun d'entre eux représente une ligne du fichier CSV.
+     * @param fichier, le path du fichier CSV
+     * @return contenu, la liste de tableaux de String
+     */
     public static ArrayList<String[]> lireCSV(String fichier) {
     	try {
-    		ArrayList<String[]> contenu = new ArrayList<String[]>();
-    		FileReader fr = new FileReader(fichier);
-    		BufferedReader reader = new BufferedReader(fr);
-    		
-    		String s;
-    		while ((s = reader.readLine()) != null) {
-    			contenu.add(s.split(","));
+    		File f = new File(fichier);
+    		if(f.exists() && !f.isDirectory()) { 
+    			ArrayList<String[]> contenu = new ArrayList<String[]>();
+        		FileReader fr = new FileReader(fichier);
+        		BufferedReader reader = new BufferedReader(fr);
+        		
+        		String s = reader.readLine();
+        		while ((s = reader.readLine()) != null) {
+        			contenu.add(s.split(","));
+        		}
+        		
+        		reader.close();
+        		return contenu;
     		}
-    		
-    		reader.close();
-    		return contenu;
+    		else {
+    			try {
+    				f.createNewFile();
+    				return null;
+    		    } catch (IOException e) {
+    		    	System.out.println("Erreur à la création d'un fichier.");
+    		    	e.getStackTrace();
+    		    	return null;
+    		    }
+    		}
     		
     	} catch (IOException ex) {
     		System.out.println("Erreur à l’ouverture du fichier.");
+    		System.out.println(ex.getStackTrace());
     		return null;
     	}
     }
@@ -47,23 +70,44 @@ public class AutoEcole {
     	System.out.println("Tests lireCSV()");
 	}
     
+    /**
+     * Fonction qui sert à ecrire dans un fichier CSV
+     * @param fichier, le path du fichier CSV 
+     * @param texte, le texte à écrire dans le fichier
+     */
     public static void ecrireCSV(String fichier, String texte) {
+    	File f = new File(fichier);
+		if(!f.exists()) { 
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				System.out.println("Erreur à la création d'un fichier.");
+				e.printStackTrace();
+			}
+		}
     	try {
-    		FileWriter fw = new FileWriter("fichier");
+    		FileWriter fw = new FileWriter(fichier);
     		BufferedWriter writer = new BufferedWriter(fw);
     		writer.append(texte);
     		writer.close();
     		
 		} catch (IOException ex) {
-		System.out.println("Erreur à l’écriture du fichier");
+			System.out.println("Erreur à l’écriture du fichier");
+			System.out.println(ex.getStackTrace());
 		}
+	    
     }
     
 	public void testEcrireCSV() {
 		System.out.println("Tests EcrireCSV()");
 	}
     
-    public Eleve inscriptionEleve(Clock horloge) {
+	/**
+	 * Fonction qui sert à gérer l'inscription d'un.e nouvel.le élève
+	 * @return nouvelEleve, le nouvel élève (objet Eleve)
+	 */
+    public Eleve inscriptionEleve() {
+    	Clock horloge = Clock.systemUTC();
     	String entree;
     	String[] questions = {"Veuillez rentrer votre nom :", "Veuillez rentrer votre prénom :",
     						  "Veuillez rentrer votre adresse (au format - sans les crochets []: "
@@ -124,6 +168,30 @@ public class AutoEcole {
     	System.out.println("Tests inscriptionEleve()");
 	}
     
+    /**
+     * Fonction qui sert à gérer le menu de planification d'une activité (annulation et ajout).
+     */
+    public void gestionActivite() {
+    	Calendrier calendrier = new Calendrier();
+    	while(true) {
+    		int semaines = calendrier.afficherCalendrierMois();
+        	System.out.println("Veuillez indiquer le numéro de la semaine voulue:");
+        	String entree = getInput();
+        	try {
+        		int semaine = Integer.parseInt(entree);
+        		
+        	}
+        	catch(Exception e) {
+        		System.out.println("Format incorrect.");
+        		continue;
+        	}
+    	}
+    	
+    }
+    
+    /**
+     * Fonction qui sert à démarrer l'application
+     */
     public void demarrer() {
     	
     }
