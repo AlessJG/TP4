@@ -2,7 +2,7 @@ import java.time.*;
 import java.util.*;
 
 public class Activite {
-	private LocalDate dateActivite; //la date de l'activité 
+	private LocalDate date; //la date de l'activité 
 	private LocalTime heureDebut; //l'heure de début de l'activité
 	private Duration duree; //la durée de l'activité
 	private Eleve eleve; //l'élève qui participe à cette activité
@@ -57,9 +57,9 @@ public class Activite {
 	 * @param type le type d'activité
 	 * @param statut le statut de l'activité (complétée ou non)
 	 */
-	public Activite(LocalDate dateActivite, LocalTime heureDebut, Duration duree, Eleve eleve, 
+	public Activite(LocalDate date, LocalTime heureDebut, Duration duree, Eleve eleve, 
 			Moniteur moniteur, boolean voitureExt, TypeActivite type, Statut statut) {
-		this.dateActivite = dateActivite;
+		this.date = date;
 		this.heureDebut = heureDebut;
 		this.duree = duree;
 		this.eleve = eleve;
@@ -108,11 +108,27 @@ public class Activite {
 	}
 	
 	/**
-	 * Accesseur de la date de l'activité
-	 * @return this.dateActivite
+	 * Accesseur de la date de l'activité 
+	 * @return this.dateActivite en nombre
 	 */
-	public LocalDate getDateActivite() {
-		return this.dateActivite;
+	public int getDate() {
+		return this.date.getDayOfMonth();
+	}
+	
+	/**
+	 * Accesseur de l'heure de début de l'activité
+	 * @return this.heureDebut en string
+	 */
+	public String getHeure() {
+		return this.heureDebut.toString();
+	}
+	
+	/**
+	 * Accesseur de la duree de l'activité
+	 * @return this.duree en minutes
+	 */
+	public long getDuree() {
+		return this.duree.toMinutes();
 	}
 	
 	/**

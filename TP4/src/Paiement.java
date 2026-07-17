@@ -8,17 +8,20 @@ public class Paiement {
 	private Activite activite;
 	private Statut statut;
 	private Methode methode;
-	private enum Statut{
+	enum Statut{
 		Paye, 
 		Impaye, 
 		PartiellementPaye
 	}
-	private enum Methode{
+	enum Methode{
 		Espèces, 
 		Carte, 
 		Virement
 	}
 	
+	public Statut getStatut() {
+		return this.statut;
+	}
 	
 	
 	

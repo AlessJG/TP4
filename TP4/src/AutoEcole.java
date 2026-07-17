@@ -5,6 +5,7 @@ import java.util.*;
 public class AutoEcole {
 	static Scanner scanner = new Scanner(System.in); //le scanner de la classe
 	private ArrayList<Eleve> eleves; //la liste de tous les eleves inscrit à l'auto-école
+	private Eleve utilisateur; //l'utilisateur du programme
 
 	/**
 	 * Fonction qui permet de lire les entrées des utilisateurs et qui quit l'application dès que 'Q'
@@ -171,14 +172,73 @@ public class AutoEcole {
     /**
      * Fonction qui sert à gérer le menu de planification d'une activité (annulation et ajout).
      */
-    public void gestionActivite() {
-    	Calendrier calendrier = new Calendrier();
+    public void gererActivite() {
+    	//pas planifier si: activite deja prevue ou si derniere activite pas encore payee
+    	utilisateur = eleves.get(0);
+    	System.out.println("Veuillez choisir une option:\n1 Planifier une activité"
+    			+ "\n2 Annuler une activité");
+    	
+    	String entree = getInput();
+    	if(entree.equals("1")) {
+    		if(utilisateur.getActivitePrevue()) {
+        		System.out.println("Vous ne pouvez pas planifier plus d'une activité à l'avance.");
+        		return;
+        	}
+    		else if(utilisateur.impaye()) {
+    			System.out.println("Vous ne pouvez pas planifier une activité si vous n'avez pas "
+    								+ "fini de payer pour celle précédente.");
+        		return;
+    		}
+    		else {
+    			
+    		}
+    	}
+    }
+    
+    public void annulererActivite() {
+    	
+    }
+    
+    public void planifierActivite() {
+    	utilisateur = eleves.get(0);
+    	Calendrier calendrier = new Calendrier(); //on crée un calendrier
+    	
     	while(true) {
-    		int semaines = calendrier.afficherCalendrierMois();
+    		Date[][] semaines = calendrier.afficherCalendrierMois(); //on affiche le mois
         	System.out.println("Veuillez indiquer le numéro de la semaine voulue:");
         	String entree = getInput();
+        	
+        	//On gère les erreurs d'entrées possibles de l'utilisateur avec un try/catch
         	try {
-        		int semaine = Integer.parseInt(entree);
+        		int semaine = Integer.parseInt(entree); //l'index de la semaine choisie
+        		
+        		//On vérifie si la semaine existe, sinon on recommence la boucle
+        		if(semaine > semaines.length) {
+        			System.out.println("Cette semaine est indisponible.");
+            		continue;
+        		}
+        		
+        		long duree = utilisateur.getTempsLecon(); //la durée de la lecon
+        		System.out.println("Durée de votre prochaine activité: " +  duree);
+        		System.out.println("Veuillez indiquer le créneau horaire choisi au format jour-HH:MM"
+        							+ "(n'oubliez pas de choisir en fonction de la durée de "
+        							+ "votre activité): ");
+        		
+        		calendrier.afficherCalendrierSemaine(semaines[semaine]); //on affiche les créneaux horaires diponibles 
+        																 //de la semaine choisie
+        		entree = getInput();
+        		
+        		//On créer nos variables nécessaires en fonction de l'entrée utilisateur
+    			String[] s = entree.split("-");
+        		LocalTime h = LocalTime.parse(s[1]);
+        		int jour = Integer.parseInt(s[0]);
+        		
+        		//On vérifie si le créneaux horaire choisi existe, sinon on recommence la boucle
+        		if(!(semaines[semaine][jour-1].getCreneauDispo().containsKey(h))) {
+        			System.out.println("Ce créneau est indisponible.");
+            		continue;
+        		}
+        		
         		
         	}
         	catch(Exception e) {
@@ -193,6 +253,5 @@ public class AutoEcole {
      * Fonction qui sert à démarrer l'application
      */
     public void demarrer() {
-    	
     }
 }

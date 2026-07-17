@@ -173,10 +173,11 @@ public class Calendrier {
      * @param semaine, la liste des dates (objets Date) de la semaine à afficher
      */
     public void afficherCalendrierSemaine(Date[] semaine) {
-    	
+    	int i = 1;
     	for (Date date : semaine) {
-    		System.out.println("Jour: " + date.getJour());
+    		System.out.println("Jour" + i + ": " + date.getJour());
         	System.out.println("Heures disponibles:\n" + date.toString());
+        	i++;
         }
     }
     
