@@ -1,18 +1,18 @@
 import java.util.*;
 
-public class Voiture {
-	private String marque; //la marque du véhicule
-	private int annee; //l'année du véhicule
-	private String plaque; //la plaque du véhicule
-	private double prixAchat; //le prix d'achat du véhicule
-	private int kmAchat; //le kilométrage à l'achat du véhicule
-	private int kilometrage; //le kilométrage courant du véhicule
+public final class Voiture {
+	private final String marque; //la marque du véhicule
+	private final int annee; //l'année du véhicule
+	private final String plaque; //la plaque du véhicule
+	private final double prixAchat; //le prix d'achat du véhicule
+	private final int kmAchat; //le kilométrage à l'achat du véhicule
+	private final int kilometrage; //le kilométrage courant du véhicule
 	private LinkedList<DepenseVoiture> listeDepVoit; //la liste des dépenses (objets DepenseVoiture)
 													 //liées à la voiture
 	private Etat etat; //l'état de la voiture
 	
 	//les différents états possibles de la voiture, R-En réparation, V-Vendu, D-Disponible
-	private enum Etat{ 
+	enum Etat{ 
 		R,				
 		V,
 		D
@@ -37,5 +37,9 @@ public class Voiture {
 		this.kmAchat = kmAchat;
 		this.kilometrage = kilometrage;
 		this.etat = etat;
+	}
+	
+	public String getPlaque() {
+		return this.plaque;
 	}
 }

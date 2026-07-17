@@ -11,7 +11,7 @@ public class Eleve extends Personne {
 	private Paiement facture; //le prochain paiement de l'élève
 	
 	//les différentes leçons à effectuer par l'étudiant, sont numérotées 
-	private enum Lecon {
+	enum Lecon {
 		LT1, LT2, LT3, 
 		LT4, LT5, ET, 
 		LPS, LT6, LPZ1, 
@@ -43,7 +43,7 @@ public class Eleve extends Personne {
 	 * @param motDePasse
 	 */
 	public Eleve(LocalDate dateInscription, String nom, String prenom, 
-			String adresse, int numTelephone, int numSAAQ, String motDePasse) {
+			String adresse, String numTelephone, String numSAAQ, String motDePasse) {
 		super(nom, prenom, adresse, numTelephone, motDePasse);
 		this.dateInscription = dateInscription;
 		this.numeroSAAQ = numSAAQ;
@@ -88,19 +88,57 @@ public class Eleve extends Personne {
 		}
 	}
 	
-	public void prochaineLecon() {
-		this.lecon = lecon.next();
+	public Activite.TypeActivite getTypeActivite() {
+		switch (this.lecon) {
+			case LT1:
+			case LT2:
+			case LT3:
+			case LT4:
+			case LT5:
+			case LT6:
+			case LT7:
+			case LT8:
+			case LT9:
+			case LT10:
+			case LT11:
+			case LT12:
+				return Activite.TypeActivite.LT;
+			case ET:
+				return Activite.TypeActivite.ET;
+			case EP:
+				return Activite.TypeActivite.EP;
+			case EPL:
+				return Activite.TypeActivite.EPL;
+			case LPS:
+				return Activite.TypeActivite.LPS;
+			case LPZ1:
+			case LPZ2:
+			case LPZ3:
+			case LPZ4:
+				return Activite.TypeActivite.LPZ;
+			case LPA1:
+			case LPA2:
+			case LPA3:
+			case LPA4:
+			case LPA5:
+				return Activite.TypeActivite.LPA;
+			default:
+				return null;
+		}
 	}
 	
-	public void setActivite(Activite activite) {
-		this.activite = activite;
-	}
-	
-	public void getActiviteToString() {
+	public void getActivitePrevueToString() {
 		if(this.activitePrevue) {
 			System.out.println("Votre prochaine activité est: " + this.lecon.toString() 
 								+ " , prévue pour le " + this.activite.getDate() + " à " 
 								+ this.activite.getHeure() + "(" + this.activite.getDuree() + "min)");
+		}
+	}
+	
+	public void getActiviteToString() {
+		if(this.activitePrevue) {
+			System.out.println("Votre prochaine activité à planifier est: " + this.lecon.toString() 
+								+ "(" + this.activite.getDuree() + "min)");
 		}
 	}
 	
@@ -120,5 +158,19 @@ public class Eleve extends Personne {
 		return this.facture.getStatut().equals(Paiement.Statut.Impaye);
 	}
 	
+	public String getNumSAAQ() {
+		return this.numeroSAAQ;
+	}
 	
+	public void setLecon(Lecon lecon) {
+		this.lecon = lecon;
+	}
+	
+	public void setActivite(Activite activite) {
+		this.activite = activite;
+	}
+	
+	public void setActivitePrevue(boolean activitePrevue) {
+		this.activitePrevue = activitePrevue;
+	}
 }

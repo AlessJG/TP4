@@ -36,7 +36,7 @@ public class Calendrier {
 		String nomFichier = ("./CSV/calendriers/calendrier" + 
 				 			this.mois + ".CSV");
 		
-		ArrayList<String[]> calendrier = AutoEcole.lireCSV(nomFichier);
+		ArrayList<String[]> calendrier = GestionFichiers.lireCSV(nomFichier);
 		
 		if(calendrier == null || calendrier.isEmpty()) {
 			nouveauCalendrier(nomFichier);
@@ -81,7 +81,7 @@ public class Calendrier {
 			Date date = new Date(x);
 			this.dates.add(date);
 		}
-		AutoEcole.ecrireCSV(nomFichier, calendrierString);
+		GestionFichiers.ecrireCSV(nomFichier, calendrierString);
 	}
 	
 	/**
@@ -119,24 +119,26 @@ public class Calendrier {
         int i = 0;
         
     	for (Date d : this.dates) {
+    		
     		int jour = d.getJour();
     		if(!(d.checkIndispo())) {
         		System.out.printf(" %4d ", jour);
         		semaines[nbSemaines - 1][i] = d;
-        		i++;
     		}
     		else {
     			System.out.printf(" %4s ", "-");
     		}
+    		espaces++;
     		
-            if (((jour + espaces - 1) % 7 == 0) || (jour == nbJours)) {
-            	System.out.printf(" %4s", "(");
+    		if((espaces == 7) || (jour == this.nbJours)) {
+    			System.out.printf(" %4s", "(");
             	System.out.printf("%d", nbSemaines);
             	System.out.printf(")");
                 System.out.println();
                 nbSemaines++;
-                i=0;
-            }    		
+                espaces = 0;
+            }    	
+            		
     	}
         
         System.out.println();
@@ -175,7 +177,7 @@ public class Calendrier {
     public void afficherCalendrierSemaine(Date[] semaine) {
     	int i = 1;
     	for (Date date : semaine) {
-    		System.out.println("Jour" + i + ": " + date.getJour());
+    		System.out.println("Jour " + i + ": " + date.getJour());
         	System.out.println("Heures disponibles:\n" + date.toString());
         	i++;
         }

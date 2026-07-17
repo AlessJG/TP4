@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Date {
 	
-	private LinkedHashMap<LocalTime, Duration> heuresIndispo; //liste des créneaux d'indisponibilités de la journée (heure de debut, duree)
+	private TreeMap<LocalTime, Duration> heuresIndispo; //liste des créneaux d'indisponibilités de la journée (heure de debut, duree)
 	private boolean estIndispo; //est true si la date est complètement indisponible, sinon false
 	private int jour; //la valeur du jour du mois
 	
@@ -12,7 +12,7 @@ public class Date {
 	 * @param jour, la valeur du jour du mois 
 	 */
 	public Date(int jour) {
-		this.heuresIndispo = new LinkedHashMap<LocalTime, Duration>();
+		this.heuresIndispo = new TreeMap<LocalTime, Duration>();
 		this.estIndispo = false;
 		this.jour = jour;
 	}
@@ -64,7 +64,7 @@ public class Date {
 	 * Fonction qui sert d'accesseur au HashMap "heuresIndispo"
 	 * @return this.heuresIndispo
 	 */
-	public LinkedHashMap<LocalTime, Duration> getCreneauIndispo(){
+	public TreeMap<LocalTime, Duration> getCreneauIndispo(){
 		return this.heuresIndispo;
 	}
 	
@@ -74,8 +74,8 @@ public class Date {
 	 * @return heuresDispo, la liste des créneaux de disponibilités
 	 */
 	//puisque heures oueverture = 12PM-8PM and min lecon = 1h + 15 min entre chaque eleves
-	public LinkedHashMap<LocalTime, Duration> getCreneauDispo(){
-		LinkedHashMap<LocalTime, Duration> heuresDispo = new LinkedHashMap<LocalTime, Duration>();
+	public TreeMap<LocalTime, Duration> getCreneauDispo(){
+		TreeMap<LocalTime, Duration> heuresDispo = new TreeMap<LocalTime, Duration>();
 
 		int i = 0;
 		LocalTime previous = null;
@@ -117,10 +117,14 @@ public class Date {
 		return heuresDispo;
 	}
 	
+	public void ordonnerHeuresIndispo() {
+		
+	}
+	
 	@Override
 	public String toString() {
 		String s = "";
-		HashMap<LocalTime, Duration> heuresDispo = this.getCreneauDispo();
+		TreeMap<LocalTime, Duration> heuresDispo = this.getCreneauDispo();
 		for(LocalTime h : heuresDispo.keySet()) {
 			s += "De: " + h.toString() + "\njusqu'à";
 			LocalTime heureFin = h.plus(heuresDispo.get(h));
