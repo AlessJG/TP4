@@ -5,7 +5,7 @@ public class Activite {
 	private LocalDate date; //la date de l'activité 
 	private LocalTime heureDebut; //l'heure de début de l'activité
 	private Duration duree; //la durée de l'activité
-	private Eleve eleve; //l'élève qui participe à cette activité
+	private String numSAAQ; //le numéro SAAQ de l'élève qui participe à cette activité
 	private Moniteur moniteur; //le moniteur
 	private boolean voitureExt; //est false si la voiture de l'auto-école est utilisée, sinon true
 	private TypeActivite type; //le type d'activité
@@ -57,12 +57,12 @@ public class Activite {
 	 * @param type le type d'activité
 	 * @param statut le statut de l'activité (complétée ou non)
 	 */
-	public Activite(LocalDate date, LocalTime heureDebut, Duration duree, Eleve eleve, 
+	public Activite(LocalDate date, LocalTime heureDebut, Duration duree, String numSAAQ, 
 			Moniteur moniteur, boolean voitureExt, TypeActivite type, Statut statut) {
 		this.date = date;
 		this.heureDebut = heureDebut;
 		this.duree = duree;
-		this.eleve = eleve;
+		this.numSAAQ = numSAAQ;
 		this.moniteur = moniteur;
 		this.voitureExt = voitureExt;
 		this.type = type;
@@ -151,8 +151,8 @@ public class Activite {
 	 * Accesseur de l'élève concerné par l'activité
 	 * @return this.eleve
 	 */
-	public Eleve getEleve() {
-		return this.eleve;
+	public String getNumSAAQ() {
+		return this.numSAAQ;
 	}
 	
 }

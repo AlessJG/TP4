@@ -61,7 +61,7 @@ public class Date {
 	}
 	
 	/**
-	 * Fonction qui sert d'accesseur au HashMap "heuresIndispo"
+	 * Fonction qui sert d'accesseur au TreeMap "heuresIndispo"
 	 * @return this.heuresIndispo
 	 */
 	public TreeMap<LocalTime, Duration> getCreneauIndispo(){
@@ -117,10 +117,10 @@ public class Date {
 		return heuresDispo;
 	}
 	
-	public void ordonnerHeuresIndispo() {
-		
-	}
 	
+	/**
+	 * Fonction qui sert à afficher les créneaux horaire disponible de la date courante
+	 */
 	@Override
 	public String toString() {
 		String s = "";

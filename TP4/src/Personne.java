@@ -24,14 +24,26 @@ public abstract class Personne {
 		
 	}
 	
+	/**
+	 * Accesseur de la variable "motDePasse"
+	 * @return
+	 */
 	protected String getMotDePasse() {
 		return this.motDePasse;
 	}
 	
+	/**
+	 * Accesseur de la variable "nom"
+	 * @return
+	 */
 	public String getNom() {
 		return this.nom;
 	}
 	
+	/**
+	 * Accesseur de la variable "prenom"
+	 * @return
+	 */
 	public String getPrenom() {
 		return this.prenom;
 	}

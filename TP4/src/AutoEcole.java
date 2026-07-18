@@ -5,11 +5,16 @@ import java.util.*;
 public class AutoEcole {
 	static Scanner scanner = new Scanner(System.in); //le scanner de la classe
 	private ArrayList<Eleve> eleves; //la liste de tous les eleves inscrit à l'auto-école
-	private Eleve utilisateur; //l'utilisateur du programme
+	private ArrayList<Activite> activites; //la liste de toutes les activités prévues pour cette années
+	private Personne utilisateur; //l'utilisateur du programme
 	private Calendrier calendrier; //le calendrier lié à cette instance
-	private ArrayList<Activite> activites;
-	private Moniteur moniteur;
-	private Voiture voiture;
+	private Moniteur moniteur; //le moniteur de l'auto-école
+	private Voiture voiture; //la voiture de l'auto-école
+	private String fActivites; //le nom du fichier CSV des activites de cette année
+	private String fCalendrier; //le nom du fichier CSV du calendrier de ce mois
+	private String fVoiture; //le nom du fichier CSV des voitures de cette année
+	private String fEleves; //le nom du fichier CSV des élèves de cette année
+	
 
 	/**
 	 * Fonction qui permet de lire les entrées des utilisateurs et qui quit l'application dès que 'Q'
@@ -33,24 +38,36 @@ public class AutoEcole {
     
     
 	/**
-     * Fonction qui sert à démarrer l'application
+     * Fonction qui sert à démarrer l'application, elle initialise les variables globales de la classe
      */
     public void demarrer() {
-    	String fEleves = "./CSV/eleves/eleves" +
+    	this.fEleves = "./CSV/eleves/eleves" +
     					 LocalDate.now(Clock.systemUTC()).getYear() +
     					 ".csv";
-    	this.eleves = GestionFichiers.elevesCSV(fEleves);
+    	this.eleves = GestionFichiers.elevesCSV(this.fEleves);
     	
-    	String fActivites = "./CSV/activites/activites" +
+    	this.fVoiture = "./CSV/voitures/voiture" +
 				 LocalDate.now(Clock.systemUTC()).getYear() +
 				 ".csv";
-    	this.activites = GestionFichiers.elevesCSV(fActivites);
+    	this.voiture = GestionFichiers.voituresCSV(this.fVoiture);
     	
+    	this.fActivites = "./CSV/activites/activites" +
+				 LocalDate.now(Clock.systemUTC()).getYear() +
+				 ".csv";
+    	this.activites = GestionFichiers.activitesCSV(this.fActivites, this.voiture);
+    	
+    	this.fCalendrier = ("./CSV/calendriers/calendrier" +
+				 LocalDate.now(Clock.systemUTC()).getYear() +
+				 ".csv");
+    	
+    	this.calendrier = new Calendrier();
+    	
+    	this.moniteur = new Moniteur();
     	this.menuPrincipal();
     }
     
     /**
-     * 
+     * Fonction qui sert à gérer le menu textuel principal de l'utilisateur
      */
     public void menuPrincipal() {
     	while(true) {
@@ -71,7 +88,7 @@ public class AutoEcole {
         		this.menuEleve();
     		}
         	else if(entree.equals("3")) {
-        		//this.menuInstructeur();
+        		this.menuInstructeur();
     		}
         	else {
         		System.out.println("Cette option est indisponible.");
@@ -86,7 +103,6 @@ public class AutoEcole {
 	 * @return nouvelEleve, le nouvel élève (objet Eleve)
 	 */
     public Eleve inscriptionEleve() {
-    	Clock horloge = Clock.systemUTC();
     	String entree;
     	String[] questions = {"Veuillez rentrer votre nom :", "Veuillez rentrer votre prénom :",
     						  "Veuillez rentrer votre adresse (au format - sans les crochets []: "
@@ -132,12 +148,12 @@ public class AutoEcole {
     		}
     	}
     	
-    	Eleve nouvelEleve = new Eleve(LocalDate.now(horloge), reponses[0], reponses[1], reponses[2],
+    	Eleve nouvelEleve = new Eleve(LocalDate.now(Clock.systemUTC()), reponses[0], reponses[1], reponses[2],
     								  reponses[3], reponses[4], reponses[5]);
     	
-    	String texte = String.join(",", reponses[4], reponses[0], reponses[1], reponses[2], reponses[3], LocalDate.now(horloge).toString(), " ");
-    	String fichier = "./CSV/eleves" + LocalDate.now(horloge).getYear() + ".CSV";
-    	GestionFichiers.ecrireCSV(fichier, texte);
+    	String texte = (reponses[4] + "," + reponses[0] + "," + reponses[1] + "," + reponses[2] + "," + reponses[3] + "," 
+    				   + LocalDate.now(Clock.systemUTC()) + "," + " " + "\n");
+    	GestionFichiers.ecrireCSV(this.fEleves, texte);
     	return nouvelEleve;
     }
     
@@ -146,7 +162,7 @@ public class AutoEcole {
 	}
     
     /**
-     * 
+     * Fonction qui sert à gérer le menu textuel de l'élève
      */
     public void menuEleve() {
     	while(true) {
@@ -169,7 +185,7 @@ public class AutoEcole {
     }
     
     /**
-     * 
+     * Fonction qui sert à gérer le menu textuel des options de l'élève
      */
     public void optionsEleve() {
     	System.out.println("Bienvenue " + this.utilisateur.getPrenom() + " " 
@@ -199,7 +215,6 @@ public class AutoEcole {
      */
     public void gererActivite() {
     	//pas planifier si: activite deja prevue ou si derniere activite pas encore payee
-    	utilisateur = eleves.get(0);
     	System.out.println("Veuillez choisir une option: ");
     	System.out.println("1 Planifier une activité");
         System.out.println("2 Annuler une activité");
@@ -208,11 +223,11 @@ public class AutoEcole {
     	
     	//on veut planifier une activite
     	if(entree.equals("1")) {
-    		if(utilisateur.getActivitePrevue()) {
+    		if(((Eleve) this.utilisateur).getActivitePrevue()) {
         		System.out.println("Vous ne pouvez pas planifier plus d'une activité à l'avance.");
         		return;
         	}
-    		else if(utilisateur.impaye()) {
+    		else if(((Eleve) this.utilisateur).impaye()) {
     			System.out.println("Vous ne pouvez pas planifier une activité si vous n'avez pas "
     								+ "fini de payer pour celle précédente.");
         		return;
@@ -223,7 +238,7 @@ public class AutoEcole {
     	}
     	//on veut annuler une activite
     	else if(entree.equals("2")) {
-    		if(utilisateur.getActivitePrevue()) {
+    		if(((Eleve) this.utilisateur).getActivitePrevue()) {
     			this.annulerActivite();
     		}
     		else {
@@ -234,19 +249,61 @@ public class AutoEcole {
     	}
     }
     
+    /**
+     * Fonction qui sert à annuler une activité de l'élève
+     */
     public void annulerActivite() {
-    	//annuler activite dans le rapport
-    	//annuler activite pour leleve
-    	//delete l'instance de l'activite
+    	//On vérifie si l'utilisateur a bel et bien une activité à annuler
+    	if(!(((Eleve) this.utilisateur).getActivitePrevue())) {
+    		System.out.println("Vous n’avez déjà aucune activité prévue.");
+    		return;
+    	}
+    	else {
+    		((Eleve) this.utilisateur).getActivitePrevueToString();
+    		System.out.println("Voulez-vous l'annuler? (Oui ou Non)");
+    		String entree = getInput();
+    		
+    		//On vérifie si l'élève veut vraiment annuler sa prochaine activité
+    		if(entree.equalsIgnoreCase("oui")) {
+    			
+    			//On modifie les informations de l'élève concernant l'activité
+    			((Eleve) this.utilisateur).setActivite(null);
+    			((Eleve) this.utilisateur).setActivitePrevue(false);
+    			((Eleve) this.utilisateur).setLecon(((Eleve) this.utilisateur).getLecon().previous());
+    			
+    			//On retire l'activité du fichier CSV dans lequelle elle était enregistrée
+    			GestionFichiers.retirerActiviteCSV(((Eleve) this.utilisateur).getNumSAAQ(), fActivites);
+    			
+    			//On libère le créneau horaire du calendrier et de son fichier CSV
+    			//Date, estIndispo, heure1-duree(en min), heure2-duree, heure3-duree, ...
+    			String creneau = ((Eleve) this.utilisateur).getActivite().getHeure() + "-" + ((Eleve) this.utilisateur).getActivite().getDuree();
+    			GestionFichiers.retirerCalendrierCSV(String.valueOf(((Eleve) this.utilisateur).getActivite().getDate()), 
+    												 creneau, this.fCalendrier);
+    			
+    			//On retire l'activité de la liste des activités courantes
+    			this.activites.remove(((Eleve) this.utilisateur).getActivite());
+    			
+    			System.out.println("Votre activité a été annulée.");
+    		}
+    		else if(entree.equalsIgnoreCase("non")) {
+    			System.out.println("Votre activité n'a pas été annulée.");
+    		}
+    		else {
+    			System.out.println("Format incorrecte.");
+    		}
+    		return;
+    		
+    	}
     }
     
+    /**
+     * Fonction qui sert à planifier une activité de l'élève
+     */
     public void planifierActivite() {
     	//GERE SI EXAMEN
-    	utilisateur = eleves.get(0);
-    	this.calendrier = new Calendrier(); //on crée un calendrier
     	
     	while(true) {
-    		utilisateur.getActiviteToString();
+    		((Eleve) this.utilisateur).getActiviteToString();
     		Date[][] semaines = this.calendrier.afficherCalendrierMois(); //on affiche le mois
         	System.out.println("Veuillez indiquer le numéro de la semaine voulue:");
         	String entree = getInput();
@@ -261,7 +318,7 @@ public class AutoEcole {
             		continue;
         		}
         		
-        		long duree = utilisateur.getTempsLecon(); //la durée de la lecon
+        		long duree = ((Eleve) this.utilisateur).getTempsLecon(); //la durée de la lecon
         		System.out.println("Durée de votre prochaine activité: " +  duree);
         		System.out.println("Veuillez indiquer le créneau horaire choisi au format jour-HH:MM"
         							+ "(n'oubliez pas de choisir en fonction de la durée de "
@@ -283,7 +340,11 @@ public class AutoEcole {
             		continue;
         		}
         		
+        		//On ajoute le créneau horaire choisi aux indisponibilités de la date
         		d.ajouterIndispo(h, Duration.ofMinutes(duree));
+        		System.out.println("Votre créneau horaire a été reservé.");
+        		
+        		//On vérifie si l'élève utilisera le véhicule de l'auto-école
         		System.out.println("Allez-vous utiliser la voiture de l'auto-école? (Oui ou Non");
         		entree = getInput();
         		
@@ -294,34 +355,36 @@ public class AutoEcole {
         			System.out.println("Veuillez rentrer le numéro d'immatriculation de "
         					+ "votre véhicule:");
         			plaque = getInput();
-        			System.out.println("Le numéro d'immatriculation de votre véhicule est"
-        					+ " " + plaque);
         		}
         		else if(entree.equalsIgnoreCase("non")) {
         			voitureExt = true;
+        			plaque = this.voiture.getPlaque();
         		}
         		else {
         			System.out.println("Format incorrecte.");
         			continue;
         		}
         		
-        		Activite activite = new Activite(d, h, Duration.ofMinutes(duree), this.utilisateur, 
-        				new Moniteur(), voitureExt, this.utilisateur.getTypeActivite(), Activite.Statut.NC);
+        		LocalDate date = LocalDate.of(LocalDate.now(Clock.systemUTC()).getYear(),
+        									  LocalDate.now(Clock.systemUTC()).getMonth(), 
+        									  d.getJour());
         		
-        		this.utilisateur.setLecon(this.utilisateur.getLecon().next());
-        		this.utilisateur.setActivite(activite);
-        		this.utilisateur.setActivitePrevue(true);
+        		//On crée une nouvelle activité (objet) en fonction des informations données
+        		Activite activite = new Activite(date, h, Duration.ofMinutes(duree), ((Eleve) this.utilisateur).getNumSAAQ(), 
+        				this.moniteur, voitureExt, ((Eleve) this.utilisateur).getTypeActivite(), Activite.Statut.NC);
         		
-        		String fCalendrier = ("./CSV/calendriers/calendrier" +
-        							 LocalDate.now(Clock.systemUTC()).getYear() +
-        							 ".csv");
+        		//On modifie les informations de l'élèves concernant une nouvelle activité prévue
+        		((Eleve) this.utilisateur).setLecon(((Eleve) this.utilisateur).getLecon().next());
+        		((Eleve) this.utilisateur).setActivite(activite);
+        		((Eleve) this.utilisateur).setActivitePrevue(true);
         		
+        		//On vérifie si l'ajout d'une activité à cette date rend cette date indisponible
         		TreeMap<LocalTime, Duration> dispo = d.getCreneauDispo();
         		if (dispo.isEmpty()) {
         			d.rendreIndispo();
         		}
         		
-        		//Date, estIndispo, heure1-duree(en min), heure2-duree, heure3-duree, ...
+        		//On ajoute dans le fichier CSV du calendrier le créneau horaire choisi aux indisponibilités de la date
         		String s1 = (d.getJour() + ", " + String.valueOf(d.checkIndispo()) + ", ");
         		
         		for(LocalTime t : dispo.keySet()) {
@@ -330,12 +393,21 @@ public class AutoEcole {
         			
         			s1 += (st + "-" + sd + ", ");
         		}
-        		GestionFichiers.ecrireCSV(fCalendrier, s1);
+        		s1 += "\n";
+        		GestionFichiers.ecrireCSV(this.fCalendrier, s1);
         		this.calendrier = new Calendrier();
         		
+        		//On enregistre la nouvelle activité créée dans le fichier CSV des activités
+        		String dateS = (date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth());
+        		String s2 = ((activites.size() + 1) + ", " + activite.getType().toString() + ", " + activite.getNumSAAQ() + ", " + 
+        					  dateS + ", " + activite.getHeure() + ", " + activite.getMontant() + ", " + activite.getStatut().toString() +
+        					  plaque + "\n");
+        		GestionFichiers.ecrireCSV(fActivites, s2);
         		
-        		//ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaque
-        		//changer activite.csv
+        		//On ajoute la nouvelle activité à la liste des activités de cette instance
+        		this.activites.add(activite);
+        		
+        		System.out.println("Votre activité a été enregistrée.");
         		
         	}
         	catch(Exception e) {
@@ -353,7 +425,192 @@ public class AutoEcole {
     	
     }
     
+    /**
+     * Fonction qui sert à gérer le menu textuel de l'instructeur
+     */
+    public void menuInstructeur() {
+    	while(true) {
+    		String[] instructeur = new String[2];
+    		System.out.println("Veuillez rentrer votre numero de permis :");
+        	instructeur[0] = getInput();
+        	System.out.println("Veuillez rentrer votre mot de passe:");
+        	instructeur[1] = getInput();
+        	
+    		if (this.moniteur.getNumPermis().equals(instructeur[0]) && this.moniteur.getMotDePasse().equals(instructeur[1])) {
+    			this.utilisateur = this.moniteur;
+    			this.optionsInstructeur();
+    		}
+        	
+        	System.out.println("Numéros de permis et/ou mot de passe incorrecte.");
+        	continue;
+    	}
+    }
     
+    /**
+     * Fonction qui sert à gérer le menu textuel des options de l'instructeur
+     */
+    public void optionsInstructeur() {
+    	System.out.println("Bienvenue " + this.utilisateur.getPrenom() + " " + this.utilisateur.getNom());
+    	while(true) {
+    		System.out.println("Veuillez choisir une option parmi celles suivantes:");
+        	System.out.println("1 Générer un rapport des élèves");
+        	System.out.println("2 Générer un rapport des revenus");
+        	System.out.println("3 Générer un rapport des dépenses de la voiture");
+        	System.out.println("4 Générer un rapport des autres dépenses");
+        	System.out.println("5 Visionner les disponibilités d’une semaine");
+        	System.out.println("6 Modifier vos disponibilités de la semaine");
+        	System.out.println("7 Marquer une activité comme complétée");
+        	
+        	try {
+        		int entree = Integer.parseInt(getInput());
+        		switch (entree){
+        			case 1:
+        				//generer rapport eleve
+        			case 2:
+        				//generer rapport revenus
+        			case 3:
+        				//generer rapport depenses voiture
+        			case 4:
+        				//generer rapport depenses autres
+        			case 5:
+        				this.visionnerDispo();
+        			case 6:
+        				this.modifierDispo();
+        			case 7:
+        				this.completerActivite();
+        		}
+        	}
+        	catch(Exception e) {
+        		System.out.println("Option indisponible.");
+        		continue;
+        	}
+    	}
+    }
     
+    /**
+     * Fonction qui sert à visionner les disponibilités de la semaine
+     * @return une liste des dates de la semaine
+     */
+    public Date[] visionnerDispo() {
+    	Date[][] dates = this.calendrier.afficherCalendrierMois();
+    	System.out.println("Veuillez indiquer la semaine choisie:");
+    	try {
+    		int entree = Integer.parseInt(getInput());
+    		
+    		//On vérifie si la semaine existe
+    		if(entree > dates.length) {
+    			System.out.println("Cette semaine est indisponible.");
+        		return null;
+    		}
+    		System.out.println("Voici les disponibilités de la semaine:");
+    		this.calendrier.afficherCalendrierSemaine(dates[entree]);
+    		return dates[entree];
+    	}
+    	catch(Exception e) {
+    		System.out.println("Format incorrecte.");
+    		return null;
+    	}
+    }
     
+    /**
+     * Fonction qui sert à gérer le menu textuel qui sert à modifier 
+ 	 * une disponibilité de l'instructeur
+     */
+    public void modifierDispo() {
+    	Date[] dates = this.visionnerDispo();
+    	if(dates == null) {
+    		return;
+    	}
+    	
+    	System.out.println("Veuillez choisir une option parmi celles suivantes:");
+    	System.out.println("1 Ajouter une disponibilité");
+    	System.out.println("2 Retirer une disponibilité");
+    	
+    	String entree = getInput();
+    	
+    	if(entree.equals("1")) {
+    		this.ajouterDispo(dates);
+    	}
+    	else if(entree.equals("2")) {
+    		this.retirerDispo(dates);
+    	}
+    	else {
+    		System.out.println("Option indisponible.");
+    		return;
+    	}
+    	this.calendrier = new Calendrier();
+    }
+    
+    /**
+     * Fonction qui sert à ajouter une disponibilité au calendrier
+     * @param dates, les dates de la semaine choisie
+     */
+    public void ajouterDispo(Date[] dates) {
+    	try {
+    		System.out.println("Veuillez indiquer le jour correspondant à la date de la disponibilité à ajouter (au format J):");
+        	String entree = getInput();
+        	int j = Integer.parseInt(entree);
+        	Date d = dates[j-1];
+        	
+        	System.out.println("Veuillez indiquer l'heure de début de la disponibilité à ajouter (au format HH-MM):");
+        	entree = getInput();
+        	LocalTime h = LocalTime.parse(entree);
+        	
+        	System.out.println("Veuillez indiquer la durée de la disponibilité à ajouter (en min):");
+        	entree = getInput();
+        	int duree = Integer.parseInt(entree);
+    		
+    		//On vérifie si le créneaux horaire choisi existe dans les indisponibilités
+    		if(!(d.getCreneauIndispo().containsKey(h))) {
+    			
+    			//On ajoute le créneau horaire choisi aux disponibilités de la date
+    			d.enleverIndispo(h, Duration.ofMinutes(duree));
+        		System.out.println("Le créneau horaire a été ajouté aux disponibilités de la date.");
+    		}
+    		return;
+    	}
+    	catch (Exception e) {
+    		System.out.println("Format incorrecte.");
+    	} 	
+    }
+    
+    /**
+     * Fonction qui sert à retirer une disponibilité du calendrier
+     * @param dates, les dates de la semaine choisie
+     */
+    public void retirerDispo(Date[] dates) {
+    	try {
+    		System.out.println("Veuillez indiquer le jour correspondant à la date de l'indisponibilité à ajouter (au format J):");
+        	String entree = getInput();
+        	int j = Integer.parseInt(entree);
+        	Date d = dates[j-1];
+        	
+        	System.out.println("Veuillez indiquer l'heure de début de l'indisponibilité à ajouter (au format HH-MM):");
+        	entree = getInput();
+        	LocalTime h = LocalTime.parse(entree);
+        	
+        	System.out.println("Veuillez indiquer la durée de l'indisponibilité à ajouter (en min):");
+        	entree = getInput();
+        	int duree = Integer.parseInt(entree);
+    		
+    		//On vérifie si le créneaux horaire choisi existe dans les indisponibilités
+    		if(!(d.getCreneauIndispo().containsKey(h))) {
+    			
+    			//On ajoute le créneau horaire choisi aux disponibilités de la date
+    			d.ajouterIndispo(h, Duration.ofMinutes(duree));
+        		System.out.println("Le créneau horaire a été ajouté aux indisponibilités de la date.");
+    		}
+    		return;
+    	}
+    	catch (Exception e) {
+    		System.out.println("Format incorrecte.");
+    	} 	
+    }
+    
+    /**
+     * Fonction qui sert à rendre une activité choisie par l'instructeur complétée
+     */
+    public void completerActivite() {
+    	
+    }
 }

@@ -183,6 +183,10 @@ public class Calendrier {
         }
     }
     
+    public ArrayList<Date> getDates(){
+    	return this.dates;
+    }
+    
     /**
      * Fonction qui sert à supprimer un fichier.
      * @param fichier, le nom du fichier à supprimer

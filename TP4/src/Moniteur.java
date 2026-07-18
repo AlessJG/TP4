@@ -10,6 +10,10 @@ public final class Moniteur extends Personne {
 		this.numPermis = "12345678";
 	}
 	
+	/**
+	 * Accesseur de la variable "numPermis"
+	 * @return
+	 */
 	public String getNumPermis() {
 		return this.numPermis;
 	}

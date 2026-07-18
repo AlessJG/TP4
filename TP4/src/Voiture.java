@@ -39,6 +39,10 @@ public final class Voiture {
 		this.etat = etat;
 	}
 	
+	/**
+	 * Accesseur de la variable "plaque"
+	 * @return
+	 */
 	public String getPlaque() {
 		return this.plaque;
 	}
