@@ -148,11 +148,23 @@ public class Activite {
 	}
 	
 	/**
+	 * Mutateur du statut de l'activité
+	 */
+	public void setStatut(Statut statut) {
+		this.statut = statut;
+	}
+	
+	
+	/**
 	 * Accesseur de l'élève concerné par l'activité
 	 * @return this.eleve
 	 */
 	public String getNumSAAQ() {
 		return this.numSAAQ;
+	}
+	
+	public boolean getVoitureExt() {
+		return this.voitureExt;
 	}
 	
 }

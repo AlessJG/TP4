@@ -3,15 +3,11 @@ public class Main {
 	
 	/**
 	 * Fonction qui sert à initialiser les tests pour toutes les classes
+	 * @throws Exception 
 	 */
-	public static void tests() {
-		System.out.println("---Tests classe AutoEcole---");
-		AutoEcole autoEcole = new AutoEcole();		
-		autoEcole.testGetInput();
-		autoEcole.testLireCSV();
-		autoEcole.testEcrireCSV();
-		autoEcole.testInscriptionEleve();
-		//à compléter
+	public static void tests() throws Exception {
+		TestsGestionFichiers.testsGestionFichiers();
+		TestsAutoEcole.testsAutoEcole();
 		
 	}
 	
@@ -19,12 +15,13 @@ public class Main {
 	/**
 	 * Main, exécute les tests de toutes les classes en commençant la fonction tests()
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String args) {
+	public static void main(String[] args) throws Exception {
 		
-		tests();
+		//tests();
 		
-		/*AutoEcole autoEcole = new AutoEcole();
-		autoEcole.demarrer();*/
+		AutoEcole autoEcole = new AutoEcole();
+		autoEcole.menuPrincipal();
 	}
 }

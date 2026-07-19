@@ -198,7 +198,12 @@ public class Eleve extends Personne {
 	 * @return
 	 */
 	public boolean impaye() {
-		return this.facture.getStatut().equals(Paiement.Statut.Impaye);
+		if(this.facture == null) {
+			return false;
+		}
+		else {
+			return this.facture.getStatut().equals(Paiement.Statut.Impaye);
+		}
 	}
 	
 	/**
@@ -227,9 +232,17 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Mutateur de la variable "activitePrevue"
-	 * @return
+	 * @param activitePrevue
 	 */
 	public void setActivitePrevue(boolean activitePrevue) {
 		this.activitePrevue = activitePrevue;
+	}
+	
+	/**
+	 * Mutateur de la variable "dateFin"
+	 * @param date, la date de fin
+	 */
+	public void setDateFin(LocalDate date) {
+		this.dateFin = date;
 	}
 }

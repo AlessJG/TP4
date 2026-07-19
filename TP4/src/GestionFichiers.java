@@ -21,9 +21,7 @@ public class GestionFichiers {
         		while ((s = reader.readLine()) != null) {
         			contenu.add(s.split(","));
         		}
-        		
-        		//On enlève la première ligne qui ne représente que le format des lignes du fichier CSV
-        		contenu.remove(0); 
+        		       		
         		reader.close();
         		return contenu;
     		}
@@ -45,9 +43,6 @@ public class GestionFichiers {
     	}
     }
     
-    public void testLireCSV() {
-    	System.out.println("Tests lireCSV()");
-	}
     
     /**
      * Fonction qui sert à ecrire dans un fichier CSV
@@ -77,12 +72,19 @@ public class GestionFichiers {
 	    
     }
     
-	public void testEcrireCSV() {
-		System.out.println("Tests EcrireCSV()");
-	}
+    public static void ajouterCSV(String fichier, String texte) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fichier, true));
+            writer.append(texte);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Erreur à l'écriture du fichier");
+            e.printStackTrace();
+        }
+    }
     
 	/**
-	 * Fonction qui sert à créer la liste des élèves à partir des fichiers elevesXXXX.csv. 
+	 * Fonction qui sert à créer la liste des élèves à partir des fichiers elevesXXXX.csv (ou XXXX est l'année voulue)
 	 * Permet aussi de gérer les fichiers CSV des élèves: mise à jour des données si l'année vient de changer, 
 	 * création d'un nouveau fichier si celui de cette année n'existe pas encore.
 	 * @param nomFichier, le nom du fichier CSV des élèves de l'année voulue
@@ -111,14 +113,14 @@ public class GestionFichiers {
 			else {
 				String s = "";
 				for(String[] sTab : elevesSPrec ) {
-					if(sTab[7].isBlank() || sTab[7].isEmpty()) {
+					if(sTab.length < 8 || sTab[7].trim().isEmpty()) {
 						s += String.join(",", sTab);
 						s += "\n";
-						String[] dateS = sTab[5].split("-");
+						String[] dateS = sTab[6].split("-");
 						LocalDate dateInscription = LocalDate.of(
-								Integer.parseInt(dateS[2]), 
+								Integer.parseInt(dateS[0]), 
 								Integer.parseInt(dateS[1]), 
-								Integer.parseInt(dateS[0]));
+								Integer.parseInt(dateS[2]));
 						
 						Eleve eleve = new Eleve(dateInscription,
 												sTab[2],
@@ -138,12 +140,13 @@ public class GestionFichiers {
 		//Si le fichier existait
 		else {
 			for(String[] sTab : elevesS) {
-				if(sTab[7].isBlank() || sTab[7].isEmpty()) {
-					String[] dateS = sTab[5].split("-");
+				if(sTab.length < 8 || sTab[7].trim().isEmpty()) {
+					String[] dateS = sTab[6].split("-");
+					
 					LocalDate dateInscription = LocalDate.of(
-							Integer.parseInt(dateS[2]), 
+							Integer.parseInt(dateS[0]), 
 							Integer.parseInt(dateS[1]), 
-							Integer.parseInt(dateS[0]));
+							Integer.parseInt(dateS[2]));
 					
 					Eleve eleve = new Eleve(dateInscription,
 											sTab[2],
@@ -195,9 +198,9 @@ public class GestionFichiers {
 				for(String[] sTab : activiteSPrec ) {
 					String[] dateS = sTab[3].split("-");
 					LocalDate date = LocalDate.of(
-							Integer.parseInt(dateS[2]), 
+							Integer.parseInt(dateS[0]), 
 							Integer.parseInt(dateS[1]), 
-							Integer.parseInt(dateS[0]));
+							Integer.parseInt(dateS[2]));
 					
 					if(date.getYear() == LocalDate.now(Clock.systemUTC()).getYear()) {
 						sTab[0] = String.valueOf(ID);
@@ -205,7 +208,7 @@ public class GestionFichiers {
 						s += "\n";
 						
 						LocalTime h = LocalTime.parse(sTab[4]);
-						Duration duree = Duration.parse(sTab[5]);
+						Duration duree = Duration.ofMinutes((long) Double.parseDouble(sTab[5]));
 						boolean voitureExt;
 						
 						if(sTab[8].equals(voiture.getPlaque().toString())) {
@@ -226,16 +229,16 @@ public class GestionFichiers {
 		}
 		//Si le fichier existait
 		else {
-			for(String[] sTab : activiteS) {
+			for(String[] sTab : activiteS.subList(1, activiteS.size())) {
 			
 				String[] dateS = sTab[3].split("-");
 				LocalDate date = LocalDate.of(
-						Integer.parseInt(dateS[2]), 
+						Integer.parseInt(dateS[0]), 
 						Integer.parseInt(dateS[1]), 
-						Integer.parseInt(dateS[0]));
+						Integer.parseInt(dateS[2]));
 									
 				LocalTime h = LocalTime.parse(sTab[4]);
-				Duration duree = Duration.parse(sTab[5]);
+				Duration duree = Duration.ofMinutes((long) Double.parseDouble(sTab[5]));
 				boolean voitureExt;
 				
 				if(sTab[8].equals(voiture.getPlaque().toString())) {
@@ -262,20 +265,20 @@ public class GestionFichiers {
 	public static void retirerActiviteCSV(String numSAAQ, String nomFichier) {
 		ArrayList<String[]> activitesTab = GestionFichiers.lireCSV(nomFichier);
 		int ID = 1;
-		String nouvS = "";
-		
-		for (int i = 1; i < activitesTab.size(); i++) {
-	        String[] s = activitesTab.get(i);
+		String nouvS = "ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaques\n";
 
-	        if(s[2].equals(numSAAQ)) {
-				activitesTab.remove(ID);
-				continue;
-			}
+		for (String[] s : activitesTab) {
 
-	        s[0] = String.valueOf(ID++);
-	        nouvS += String.join(",", s) + "\n";
+		    if (s[2].equals(numSAAQ)) {
+		        continue;
+		    }
+
+		    s[0] = String.valueOf(ID++);
+		    nouvS += String.join(",", s) + "\n";
 		}
+
 		ecrireCSV(nomFichier, nouvS);
+		//VERIFIER QUE QUAND UTILISEE EST A STATUT NC
 	}
 	
 	/**
@@ -286,9 +289,9 @@ public class GestionFichiers {
 	 */
 	public static void retirerCalendrierCSV(String date, String creneau, String nomFichier) {
 		ArrayList<String[]> datesTab = GestionFichiers.lireCSV(nomFichier);
-		String nouvS = "";
+		String nouvS = "Date,heure1-duree(en min), heure2-duree, heure3-duree, ...\n";
 		
-		for (int i = 1; i < datesTab.size(); i++) {
+		for (int i = 0; i < datesTab.size(); i++) {
 	        String[] s = datesTab.get(i);
 
 	        if (s[0].equals(date)) {
@@ -306,6 +309,78 @@ public class GestionFichiers {
 	        nouvS += String.join(",", s) + "\n";
 		}
 		ecrireCSV(nomFichier, nouvS);
+	}
+	
+	/**
+	 * Fonction qui sert à mettre à jour une journée du calendrier dans le fichier CSV
+	 * @param date, objet Date contenant les nouvelles informations
+	 * @param nomFichier, nom du fichier calendrier
+	 */
+	public static void modifierCalendrierCSV(Date date, String nomFichier) {
+
+	    ArrayList<String[]> calendrier = lireCSV(nomFichier);
+	    
+	    for(String[] ligne : calendrier){
+	        System.out.println(Arrays.toString(ligne));
+	    }
+	    
+	    String nouveau = "Date,heure1-duree(en min)\n";
+
+	    for(int i=0; i<calendrier.size(); i++) {
+
+	        String[] ligne = calendrier.get(i);
+
+	        if (Integer.parseInt(ligne[0].trim()) == date.getJour()) {
+
+	            TreeMap<LocalTime, Duration> indispo = date.getCreneauIndispo();
+
+	            String s = "" + date.getJour();
+
+	            for(LocalTime h : indispo.keySet()){
+	                s += "," + h + "-" + indispo.get(h).toMinutes();
+	            }
+
+
+	            nouveau += s + "\n";
+	        }
+	        else {
+	            nouveau += String.join(",", ligne) + "\n";
+	        }
+	    }
+
+	    ecrireCSV(nomFichier, nouveau);
+	}
+	
+	/**
+	 * Modifie le statut d'une activité dans le fichier CSV.
+	 * @param activite activité à modifier
+	 * @param nomFichier nom du fichier CSV
+	 */
+	public static void modifierActiviteCSV(Activite activite, String nomFichier) {
+
+	    ArrayList<String[]> activitesTab = lireCSV(nomFichier);
+
+	    String nouvS =
+	        "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n";
+
+	    int id = 1;
+
+	    for (int i = 1; i < activitesTab.size(); i++) {
+
+	        String[] s = activitesTab.get(i);
+
+	        if (s[2].equals(activite.getNumSAAQ())
+	                && s[3].equals(String.valueOf(activite.getDate()))
+	                && s[4].equals(activite.getHeure().toString())) {
+
+	            s[7] = activite.getStatut().toString();
+	        }
+
+	        s[0] = String.valueOf(id++);
+	        nouvS += String.join(",", s) + "\n";
+	    }
+
+	    ecrireCSV(nomFichier, nouvS);
 	}
 	
 	/**
@@ -333,8 +408,7 @@ public class GestionFichiers {
 			String s = String.join(",", sTab);
 			s += "\n";
 			
-			ecrireCSV(nomFichier, "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n");
-			ecrireCSV(nomFichier, s);
+			ecrireCSV(nomFichier, "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n" + s);
 			
 			voiture = new Voiture(sTab[0], Integer.parseInt(sTab[2]), sTab[1], Double.parseDouble(sTab[3]), Integer.parseInt(sTab[4]), 
 								  Integer.parseInt(sTab[6]), Voiture.Etat.valueOf(sTab[5]));

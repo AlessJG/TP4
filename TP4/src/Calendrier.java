@@ -4,8 +4,8 @@ import java.util.*;
 
 public class Calendrier {
 	//format fichier calendrierXX.CSV -- ou XX est le numero du mois
-	//Date, estIndispo, heure1-duree(en min), heure2-duree, heure3-duree, ...
-	//1, true, 12:00-60, 14:00-90, ...
+	//Date, heure1-duree(en min), heure2-duree, heure3-duree, ...
+	//1, 12:00-60, 14:00-90, ...
 	
 	private int mois; //la valeur du mois courant (en nombre)
 	private int jour; //la valeur de la date d'aujourd'hui (en nombre)
@@ -13,28 +13,19 @@ public class Calendrier {
 	private int nbJoursRestants; //le nombre de jours restants entre aujourd'hui et la fin du mois
 	private ArrayList<Date> dates; //une liste des dates (objets Date) du mois
 	
-	//moniteur fourni dates indisponibles
-	//peut aussi rendre dates redisponible
-	//si jour indisponible alors pas affiche
-	//quand eleves sinscrive, date devient indisponible
-	//erreurs possibles:
-	//1.comparer avec date auj pour sassurer que ne pas essaye de inscrire a date passee
-	//2.sassurer que n'essaie pas de s'inscrire a date inexistante (ex 0, -, passer max)
-	//3.sassurer que n'essaie pas de s'sinscrire a date indisponible
 	
 	/**
 	 * Constructeur de la classe, initialise les variables globales
 	 */
 	public Calendrier() {
-		Clock horloge = Clock.systemUTC();
 		this.dates = new ArrayList<Date>();
-		this.jour = LocalDate.now(horloge).getDayOfMonth();
-		this.mois = LocalDate.now(horloge).getMonthValue();
-		this.nbJours = LocalDate.now(horloge).getMonth().length(LocalDate.now(horloge).isLeapYear());
-		this.nbJoursRestants = this.nbJours - LocalDate.now(horloge).getDayOfMonth() + 1;
+		this.jour = LocalDate.now().getDayOfMonth();
+		this.mois = LocalDate.now().getMonthValue();
+		this.nbJours = LocalDate.now().getMonth().length(LocalDate.now().isLeapYear());
+		this.nbJoursRestants = this.nbJours - LocalDate.now().getDayOfMonth() + 1;
 		
 		String nomFichier = ("./CSV/calendriers/calendrier" + 
-				 			this.mois + ".CSV");
+				 			this.mois + ".csv");
 		
 		ArrayList<String[]> calendrier = GestionFichiers.lireCSV(nomFichier);
 		
@@ -47,12 +38,9 @@ public class Calendrier {
 				Date date = new Date(i + this.jour);
 				String[] ligne = calendrier.get(i);
 				
-				if(ligne[1].trim().equalsIgnoreCase("true")) {
-					date.rendreIndispo();
-				}
-				for(int j = 0; j<ligne.length; j++) {
+				for(int j = 1; j<ligne.length; j++) {
 					try {
-						String[] s = ligne[j + 2].split("-");
+						String[] s = ligne[j ].split("-");
 						LocalTime heureDebut = LocalTime.parse(s[0].trim());
 						Duration duree = Duration.ofMinutes(Long.parseLong(s[1].trim()));
 						date.ajouterIndispo(heureDebut, duree);;
@@ -70,14 +58,13 @@ public class Calendrier {
 	
 	/**
 	 * Fonction qui gère l'absence de fichier calendrierXX.CSV, elle crée un nouveau fichier, le 
-	 * rempli des dates (objets Date) restantes au mois initialisées avec aucune indisponibilité
-	 * et rempli aussi this.dates avec ces dates   
+	 * rempli des dates (objets Date) restantes au mois et rempli aussi this.dates avec ces dates   
 	 * @param nomFichier, le path vers le fichier calendrierXX.CSV de ce mois
 	 */
 	public void nouveauCalendrier(String nomFichier) {
-		String calendrierString = "Date, estIndispo, heure1-duree1, heure2-duree2, heure3-duree3, ...\n";
+		String calendrierString = "Date, heure1-duree1, heure2-duree2, heure3-duree3, ...\n";
 		for (int x = this.jour; x<=this.nbJours; x++) {
-			calendrierString += x + ", false, \n";
+			calendrierString += x + ",\n";
 			Date date = new Date(x);
 			this.dates.add(date);
 		}
@@ -90,14 +77,17 @@ public class Calendrier {
 	 * @return dispo, la liste
 	 */
 	public ArrayList<Date> getDisponibilites() {
-		ArrayList<Date> dispo = new ArrayList<Date>();
-		for(int i = 0; i<this.dates.size(); i++) {
-			Date date = this.dates.get(i);
-			if(!(date.checkIndispo())) {
-				dispo.add(date);
-			}
-		}
-		return dispo;
+
+	    ArrayList<Date> dispo = new ArrayList<>();
+
+	    for (Date date : this.dates) {
+
+	        if (!date.getCreneauDispo().isEmpty()) {
+	            dispo.add(date);
+	        }
+	    }
+
+	    return dispo;
 	}
 	
 	/**
@@ -111,35 +101,35 @@ public class Calendrier {
 
         System.out.println("MOIS:" + nomMois[mois - 1]);
         
-        ArrayList<Date> dispo = this.getDisponibilites();
-        int espaces = afficherEntete(dispo.get(0));
-        
-        Date[][] semaines = new Date[4][7];
-        int nbSemaines = 1;
-        int i = 0;
-        
-    	for (Date d : this.dates) {
-    		
-    		int jour = d.getJour();
-    		if(!(d.checkIndispo())) {
-        		System.out.printf(" %4d ", jour);
-        		semaines[nbSemaines - 1][i] = d;
-    		}
-    		else {
-    			System.out.printf(" %4s ", "-");
-    		}
-    		espaces++;
-    		
-    		if((espaces == 7) || (jour == this.nbJours)) {
-    			System.out.printf(" %4s", "(");
-            	System.out.printf("%d", nbSemaines);
-            	System.out.printf(")");
-                System.out.println();
-                nbSemaines++;
-                espaces = 0;
-            }    	
-            		
-    	}
+        Date[][] semaines = new Date[6][7];
+
+        int semaine = 0;
+        int colonne = afficherEntete(this.dates.get(0));
+
+        for (Date d : this.dates) {
+        	if (!d.getCreneauDispo().isEmpty()) {
+                semaines[semaine][colonne] = d;
+                System.out.printf("%6d", d.getJour());
+            } else {
+                System.out.printf("%6s", "-");
+            }
+
+            colonne++;
+
+            if (colonne == 7) {
+                System.out.println(" (" + (semaine + 1) + ")");
+                colonne = 0;
+                semaine++;
+
+                if (semaine == semaines.length)
+                    break;
+            }
+        }       		
+
+        if (colonne != 0) {
+            System.out.printf(" (%d)", semaine+1);
+            System.out.println();
+        }
         
         System.out.println();
         return semaines;
@@ -161,7 +151,11 @@ public class Calendrier {
         System.out.println();
         
         int diff = start.getJour() - this.jour;
-        int espaces = LocalDate.now().plusDays(diff).getDayOfWeek().getValue();
+        DayOfWeek jourSemaine = LocalDate.now()
+                .plusDays(diff)
+                .getDayOfWeek();
+
+        int espaces = jourSemaine.getValue() % 7;
 
         for (int i = 0; i < espaces; i++) {
             System.out.print("      ");
@@ -176,50 +170,23 @@ public class Calendrier {
      */
     public void afficherCalendrierSemaine(Date[] semaine) {
     	int i = 1;
-    	for (Date date : semaine) {
-    		System.out.println("Jour " + i + ": " + date.getJour());
-        	System.out.println("Heures disponibles:\n" + date.toString());
-        	i++;
+
+        for (Date date : semaine) {
+
+            if (date == null) {
+                i++;
+                continue;
+            }
+
+            System.out.println("Jour " + i + " : " + date.getJour());
+            System.out.println("Heures disponibles:");
+            System.out.println(date);
+
+            i++;
         }
     }
     
     public ArrayList<Date> getDates(){
     	return this.dates;
-    }
-    
-    /**
-     * Fonction qui sert à supprimer un fichier.
-     * @param fichier, le nom du fichier à supprimer
-     */
-    public void deleteFile(String fichier) {
-    	File file = new File(fichier); 
-        if (!(file.delete())) { 
-          System.out.println("Erreur du système: le fichier " + fichier + 
-        		  			 " n'a pas pu être supprimé.");
-        }
-    }
-    
-    public static void main(String args[]) {
-    	Calendrier cal = new Calendrier();
-    	cal.afficherCalendrierMois();
-    	
-    	
-    	Date date1 = new Date(21);
-    	date1.ajouterIndispo(LocalTime.parse("12:00"), Duration.ofMinutes(75));
-    	date1.ajouterIndispo(LocalTime.parse("14:00"), Duration.ofMinutes(105));
-    	
-    	Date date2 = new Date(22);
-    	
-    	Date date3 = new Date(23);
-    	date3.ajouterIndispo(LocalTime.parse("18:00"), Duration.ofMinutes(75));
-    	
-    	Date date4 = new Date(24);
-    	date4.ajouterIndispo(LocalTime.parse("12:00"), Duration.ofMinutes(75));
-    	date4.ajouterIndispo(LocalTime.parse("17:00"), Duration.ofMinutes(75));
-    	
-    	Date[] dates = {date1, date2, date3, date4};
-    	cal.afficherCalendrierSemaine(dates);
-    	cal.deleteFile(("./CSV/calendriers/calendrier" + 
-	 			LocalDate.now().getMonthValue() + ".CSV"));
     }
 }
