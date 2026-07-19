@@ -8,7 +8,13 @@ public class Main {
 	public static void tests() throws Exception {
 		TestsGestionFichiers.testsGestionFichiers();
 		TestsAutoEcole.testsAutoEcole();
-		
+		TestsCalendrier.testsCalendrier();
+		TestsDate.testsDate();
+		TestsEleve.testsEleve();
+		TestsPersonne.testsPersonne();
+		TestsActivite.testsActivite();
+		TestsMoniteur.testsMoniteur();
+		TestsVoiture.testsVoiture();
 	}
 	
 	
@@ -19,9 +25,9 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		//tests();
+		tests();
 		
-		AutoEcole autoEcole = new AutoEcole();
-		autoEcole.menuPrincipal();
+		/*AutoEcole autoEcole = new AutoEcole();
+		autoEcole.menuPrincipal();*/
 	}
 }

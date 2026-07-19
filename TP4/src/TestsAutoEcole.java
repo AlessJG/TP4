@@ -3,15 +3,19 @@ import java.util.*;
 
 public class TestsAutoEcole {
 	public static void testsAutoEcole() throws Exception {
-		System.out.println("---Tests pour classe AutoEcole---");
+		System.out.println("\n---Tests pour classe AutoEcole---\n");
+		
+		//getInput
 		TestsAutoEcole.testGetInputNormal();
 		TestsAutoEcole.testGetInputTrim();
 		
+		//inscriptionEleve
 		TestsAutoEcole.testInscriptionEleveConfirmationNon();
 		TestsAutoEcole.testInscriptionEleveSAAQInvalide();
 		TestsAutoEcole.testInscriptionEleveTelephoneInvalide();
 		TestsAutoEcole.testInscriptionEleveValide();
 		
+		//authentifierEleve
 		TestsAutoEcole.testAuthentifierEleveValide();
 		TestsAutoEcole.testAuthentifierEleveSAAQInvalide();
 		TestsAutoEcole.testAuthentifierEleveMotDePasseInvalide();

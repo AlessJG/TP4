@@ -5,43 +5,64 @@ import java.time.*;
 public class TestsGestionFichiers {
 	
 	public static void testsGestionFichiers() throws Exception {
-		System.out.println("---Tests pour classe GestionFichiers---");
+		System.out.println("\n---Tests pour classe GestionFichiers---\n");
+		//lireCSV
 		TestsGestionFichiers.testLireCSVFichierInexistant();
 		TestsGestionFichiers.testLireCSVFichierValide();
 		TestsGestionFichiers.testLireCSVFichierVide();
 		TestsGestionFichiers.testLireCSVHeaderSeulement();
 		
+		//ecrireCSV
 		TestsGestionFichiers.testEcrireCSVNouveauFichier();
 		TestsGestionFichiers.testEcrireCSVRemplaceContenu();
 		TestsGestionFichiers.testEcrireCSVPlusieursLignes();
 		TestsGestionFichiers.testEcrireCSVTexteVide();
 		
+		//ajouterCSV
 		TestsGestionFichiers.testAjouterCSV();
 		TestsGestionFichiers.testAjouterCSVFichierVide();
 		TestsGestionFichiers.testAjouterCSVPlusieursLignes();
 		TestsGestionFichiers.testAjouterCSVTexteVide();
 		
+		//elevesCSV
 		TestsGestionFichiers.testElevesCSVAucunFichier();
 		TestsGestionFichiers.testElevesCSVDateFin();
 		TestsGestionFichiers.testElevesCSVFichierExistant();
 		TestsGestionFichiers.testElevesCSVFichierVide();
 		TestsGestionFichiers.testElevesCSVNouvelleAnnee();
 		
+		//activitesCSV
 		TestsGestionFichiers.testActivitesCSVAucunFichier();
 		TestsGestionFichiers.testActivitesCSVFichierExistant();
 		TestsGestionFichiers.testActivitesCSVNouvelleAnnee();
 		TestsGestionFichiers.testActivitesCSVVoitureEcole();
 		TestsGestionFichiers.testActivitesCSVVoitureExterne();
 		
+		//retirerActiviteCSV
 		TestsGestionFichiers.testRetirerActiviteCSV();
 		TestsGestionFichiers.testRetirerActiviteCSVInexistant();
 		TestsGestionFichiers.testRetirerActiviteCSVVide();
 		
+		//retirerCalendrierCSV
 		TestsGestionFichiers.testRetirerCalendrierCSV();
 		TestsGestionFichiers.testRetirerCalendrierCSVCreneauInexistant();
 		TestsGestionFichiers.testRetirerCalendrierCSVDateInexistante();
 		TestsGestionFichiers.testRetirerCalendrierCSVUnSeulCreneau();
 		
+		//modifierCalendrierCSV
+		TestsGestionFichiers.testModifierCalendrierCSVAucuneIndispo();
+		TestsGestionFichiers.testModifierCalendrierCSVAutresDates();
+		TestsGestionFichiers.testModifierCalendrierCSVOrdre();
+		TestsGestionFichiers.testModifierCalendrierCSVPlusieursCreneaux();
+		TestsGestionFichiers.testModifierCalendrierCSVUnCreneau();
+		
+		//modifierActiviteCSV
+		TestsGestionFichiers.testModifierActiviteCSV();
+		TestsGestionFichiers.testModifierActiviteCSVID();
+		TestsGestionFichiers.testModifierActiviteCSVIntrouvable();
+		TestsGestionFichiers.testModifierActiviteCSVUneSeule();
+		
+		//voituresCSV
 		TestsGestionFichiers.testVoituresCSVDerniereVoiture();
 		TestsGestionFichiers.testVoituresCSVFichierExistant();
 		TestsGestionFichiers.testVoituresCSVFichierVide();
@@ -546,7 +567,7 @@ public class TestsGestionFichiers {
 
         ArrayList<Activite> activites =
                 GestionFichiers.activitesCSV(fichier, voiture);
-
+        
         if (!activites.get(0).getVoitureExt()) {
             System.out.println("OO testActivitesCSVVoitureEcole réussi");
         } else {
@@ -759,6 +780,307 @@ public class TestsGestionFichiers {
             System.out.println("OO testRetirerCalendrierCSVUnSeulCreneau réussi");
         } else {
             System.out.println("XX testRetirerCalendrierCSVUnSeulCreneau échoué");
+        }
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierCalendrierCSVUnCreneau() {
+
+        String fichier = "./CSV/calendriers/testCalendrier.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "Date,heure1-duree(en min)\n" +
+            "15\n" +
+            "16\n"
+        );
+
+        Date date = new Date(15);
+        date.ajouterIndispo(LocalTime.of(14, 0), Duration.ofMinutes(60));
+
+        GestionFichiers.modifierCalendrierCSV(date, fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        if (contenu.get(0).length == 2 &&
+            contenu.get(0)[1].equals("14:00-60")) {
+
+            System.out.println("OO testModifierCalendrierCSVUnCreneau réussi");
+        }
+        else {
+            System.out.println("XX testModifierCalendrierCSVUnCreneau échoué");
+        }
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierCalendrierCSVPlusieursCreneaux() {
+
+        String fichier = "./CSV/calendriers/testCalendrier2.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "Date,heure1-duree(en min)\n" +
+            "20\n"
+        );
+
+        Date date = new Date(20);
+
+        date.ajouterIndispo(LocalTime.of(12,0), Duration.ofMinutes(60));
+        date.ajouterIndispo(LocalTime.of(15,0), Duration.ofMinutes(90));
+
+        GestionFichiers.modifierCalendrierCSV(date,fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        if(contenu.get(0).length == 3 &&
+           contenu.get(0)[1].equals("12:00-60") &&
+           contenu.get(0)[2].equals("15:00-90")) {
+
+            System.out.println("OO testModifierCalendrierCSVPlusieursCreneaux réussi");
+        }
+        else {
+            System.out.println("XX testModifierCalendrierCSVPlusieursCreneaux échoué");
+        }
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierCalendrierCSVAutresDates() {
+
+        String fichier = "./CSV/calendriers/testCalendrier3.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "Date,heure1-duree(en min)\n" +
+            "10\n" +
+            "11\n" +
+            "12\n"
+        );
+
+        Date date = new Date(11);
+        date.ajouterIndispo(LocalTime.of(13,0), Duration.ofMinutes(60));
+
+        GestionFichiers.modifierCalendrierCSV(date,fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        boolean ok =
+            contenu.get(0)[0].equals("10") &&
+            contenu.get(1)[0].equals("11") &&
+            contenu.get(2)[0].equals("12");
+
+        if(ok)
+            System.out.println("OO testModifierCalendrierCSVAutresDates réussi");
+        else
+            System.out.println("XX testModifierCalendrierCSVAutresDates échoué");
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierCalendrierCSVAucuneIndispo() {
+
+        String fichier = "./CSV/calendriers/testCalendrier4.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "Date,heure1-duree(en min)\n" +
+            "8,12:00-60\n"
+        );
+
+        Date date = new Date(8);
+
+        GestionFichiers.modifierCalendrierCSV(date,fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        if(contenu.get(0).length == 1 &&
+           contenu.get(0)[0].equals("8")) {
+
+            System.out.println("OO testModifierCalendrierCSVAucuneIndispo réussi");
+        }
+        else {
+            System.out.println("XX testModifierCalendrierCSVAucuneIndispo échoué");
+        }
+
+        new File(fichier).delete();
+    }
+    public static void testModifierCalendrierCSVOrdre() {
+
+        String fichier = "./CSV/calendriers/testCalendrier5.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "Date,heure1-duree(en min)\n" +
+            "25\n"
+        );
+
+        Date date = new Date(25);
+
+        date.ajouterIndispo(LocalTime.of(18,0), Duration.ofMinutes(60));
+        date.ajouterIndispo(LocalTime.of(12,0), Duration.ofMinutes(60));
+        date.ajouterIndispo(LocalTime.of(15,0), Duration.ofMinutes(90));
+
+        GestionFichiers.modifierCalendrierCSV(date,fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        boolean ok =
+            contenu.get(0)[1].equals("12:00-60") &&
+            contenu.get(0)[2].equals("15:00-90") &&
+            contenu.get(0)[3].equals("18:00-60");
+
+        if(ok)
+            System.out.println("OO testModifierCalendrierCSVOrdre réussi");
+        else
+            System.out.println("XX testModifierCalendrierCSVOrdre échoué");
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierActiviteCSV() {
+
+        String fichier = "./CSV/activites/testModifier.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
+            "1,LT,1234,15,09:00,60,45.0,NC,ABC123\n" +
+            "2,LPA,5678,16,13:00,90,75.0,NC,ABC123\n"
+        );
+
+        Activite activite = new Activite(
+            LocalDate.of(2026, 7, 15),
+            LocalTime.of(9, 0),
+            Duration.ofMinutes(60),
+            "1234",
+            new Moniteur(),
+            false,
+            Activite.TypeActivite.LT,
+            Activite.Statut.C
+        );
+
+        GestionFichiers.modifierActiviteCSV(activite, fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        if (contenu.get(0)[7].equals("C")) {
+            System.out.println("OO testModifierActiviteCSV réussi");
+        }
+        else {
+            System.out.println("XX testModifierActiviteCSV échoué");
+        }
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierActiviteCSVIntrouvable() {
+
+        String fichier = "./CSV/activites/testModifier2.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
+            "1,LT,1234,15,09:00,60,45.0,NC,ABC123\n"
+        );
+
+        Activite activite = new Activite(
+            LocalDate.of(2026,7,18),
+            LocalTime.of(10,0),
+            Duration.ofMinutes(60),
+            "9999",
+            new Moniteur(),
+            false,
+            Activite.TypeActivite.LT,
+            Activite.Statut.C
+        );
+
+        GestionFichiers.modifierActiviteCSV(activite,fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        if(contenu.get(0)[7].equals("NC")) {
+            System.out.println("OO testModifierActiviteCSVIntrouvable réussi");
+        }
+        else {
+            System.out.println("XX testModifierActiviteCSVIntrouvable échoué");
+        }
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierActiviteCSVUneSeule() {
+
+        String fichier = "./CSV/activites/testModifier3.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
+            "1,LT,1234,15,09:00,60,45.0,NC,ABC123\n" +
+            "2,LT,1234,16,09:00,60,45.0,NC,ABC123\n"
+        );
+
+        Activite activite = new Activite(
+            LocalDate.of(2026,7,15),
+            LocalTime.of(9,0),
+            Duration.ofMinutes(60),
+            "1234",
+            new Moniteur(),
+            false,
+            Activite.TypeActivite.LT,
+            Activite.Statut.C
+        );
+
+        GestionFichiers.modifierActiviteCSV(activite,fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        if(contenu.get(0)[7].equals("C")
+                && contenu.get(1)[7].equals("NC")) {
+
+            System.out.println("OO testModifierActiviteCSVUneSeule réussi");
+        }
+        else {
+            System.out.println("XX testModifierActiviteCSVUneSeule échoué");
+        }
+
+        new File(fichier).delete();
+    }
+    
+    public static void testModifierActiviteCSVID() {
+
+        String fichier = "./CSV/activites/testModifier4.csv";
+
+        GestionFichiers.ecrireCSV(
+            fichier,
+            "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
+            "5,LT,1234,15,09:00,60,45.0,NC,ABC123\n" +
+            "9,LT,5678,16,10:00,60,45.0,NC,ABC123\n"
+        );
+
+        Activite activite = new Activite(
+            LocalDate.of(2026,7,15),
+            LocalTime.of(9,0),
+            Duration.ofMinutes(60),
+            "1234",
+            new Moniteur(),
+            false,
+            Activite.TypeActivite.LT,
+            Activite.Statut.C
+        );
+
+        GestionFichiers.modifierActiviteCSV(activite,fichier);
+
+        ArrayList<String[]> contenu = GestionFichiers.lireCSV(fichier);
+
+        if(contenu.get(0)[0].equals("1")
+                && contenu.get(1)[0].equals("2")) {
+
+            System.out.println("OO testModifierActiviteCSVID réussi");
+        }
+        else {
+            System.out.println("XX testModifierActiviteCSVID échoué");
         }
 
         new File(fichier).delete();

@@ -99,7 +99,7 @@ public class Date {
 
 	    Duration dernier = Duration.between(debut, fermeture);
 
-	    if(dernier.toMinutes() >= 60){
+	    if(dernier.toMinutes() >= 75){
 	        dispo.put(debut, dernier);
 	    }
 

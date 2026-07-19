@@ -229,7 +229,7 @@ public class GestionFichiers {
 		}
 		//Si le fichier existait
 		else {
-			for(String[] sTab : activiteS.subList(1, activiteS.size())) {
+			for(String[] sTab : activiteS) {
 			
 				String[] dateS = sTab[3].split("-");
 				LocalDate date = LocalDate.of(
@@ -278,7 +278,6 @@ public class GestionFichiers {
 		}
 
 		ecrireCSV(nomFichier, nouvS);
-		//VERIFIER QUE QUAND UTILISEE EST A STATUT NC
 	}
 	
 	/**
@@ -319,10 +318,6 @@ public class GestionFichiers {
 	public static void modifierCalendrierCSV(Date date, String nomFichier) {
 
 	    ArrayList<String[]> calendrier = lireCSV(nomFichier);
-	    
-	    for(String[] ligne : calendrier){
-	        System.out.println(Arrays.toString(ligne));
-	    }
 	    
 	    String nouveau = "Date,heure1-duree(en min)\n";
 
@@ -365,7 +360,7 @@ public class GestionFichiers {
 
 	    int id = 1;
 
-	    for (int i = 1; i < activitesTab.size(); i++) {
+	    for (int i = 0; i < activitesTab.size(); i++) {
 
 	        String[] s = activitesTab.get(i);
 

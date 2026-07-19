@@ -320,7 +320,6 @@ public class AutoEcole {
      * Fonction qui sert à planifier une activité.
      */
     public void planifierActivite() {
-    	//GERER EXAM
         Eleve eleve = (Eleve) utilisateur;
 
         while (true) {
@@ -438,7 +437,7 @@ public class AutoEcole {
                         eleve.getNumSAAQ(),
                         moniteur,
                         voitureAutoEcole,
-                        eleve.getTypeActivite(),
+                        eleve.getTypeActivite(!voitureAutoEcole),
                         Activite.Statut.NC);
 
                 eleve.setActivite(activite);
@@ -448,7 +447,7 @@ public class AutoEcole {
                 activites.add(activite);
 
                 String ligne =
-                        activites.size() + "," +
+                        "\n" + activites.size() + "," +
                         activite.getType() + "," +
                         activite.getNumSAAQ() + "," +
                         date + "," +

@@ -19,7 +19,7 @@ public class Eleve extends Personne {
 		LT7, LPA1, LT8, 
 		LPA2, LT9, LPA3, 
 		LT10, LPA4, LPA5, 
-		LT11, LT12, EP, EPL;
+		LT11, LT12, EP;
 
 	    private static final Lecon[] vals = values();
 	    
@@ -86,7 +86,6 @@ public class Eleve extends Personne {
 			case LT12:
 			case ET:
 			case EP:
-			case EPL:
 				return 60;
 			case LPS:
 			case LPZ1:
@@ -108,7 +107,7 @@ public class Eleve extends Personne {
 	 * Accesseur du type d'activité de la prochaine leçon
 	 * @return
 	 */
-	public Activite.TypeActivite getTypeActivite() {
+	public Activite.TypeActivite getTypeActivite(boolean voitureExt) {
 		switch (this.prochaineLecon) {
 			case LT1:
 			case LT2:
@@ -126,9 +125,10 @@ public class Eleve extends Personne {
 			case ET:
 				return Activite.TypeActivite.ET;
 			case EP:
-				return Activite.TypeActivite.EP;
-			case EPL:
-				return Activite.TypeActivite.EPL;
+				if (voitureExt)
+	                return Activite.TypeActivite.EPL;
+	            else
+	                return Activite.TypeActivite.EP;
 			case LPS:
 				return Activite.TypeActivite.LPS;
 			case LPZ1:
