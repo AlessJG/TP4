@@ -1,4 +1,3 @@
-import java.io.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -102,7 +101,7 @@ public class AutoEcole {
         	System.out.println("2 Accéder au menu des élèves");
         	System.out.println("3 Accéder au menu instructeur");
         	System.out.println("Veuillez noter qu'en tout temps inscrire la lettre Q vous"
-        					 + "fera quitter l'application.");
+        					 + " fera quitter l'application.");
         	
         	String entree = getInput();
         	

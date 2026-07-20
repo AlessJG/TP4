@@ -67,7 +67,6 @@ public class Activite {
 		this.type = type;
 		this.statut = statut;
 		this.montant = calculerMontant();
-		this.moniteur = moniteur;
 	}
 	
 	/**
