@@ -1,5 +1,4 @@
 import java.time.*;
-import java.util.*;
 
 public class Activite {
 	private LocalDate date; //la date de l'activité 
@@ -68,6 +67,7 @@ public class Activite {
 		this.type = type;
 		this.statut = statut;
 		this.montant = calculerMontant();
+		this.moniteur = moniteur;
 	}
 	
 	/**
@@ -113,6 +113,14 @@ public class Activite {
 	 */
 	public int getDate() {
 		return this.date.getDayOfMonth();
+	}
+	
+	/**
+	 * Accesseur de la date de l'activité 
+	 * @return this.dateActivite en nombre
+	 */
+	public LocalDate getLocalDate() {
+		return this.date;
 	}
 	
 	/**
@@ -163,6 +171,10 @@ public class Activite {
 		return this.numSAAQ;
 	}
 	
+	/**
+	 * Accesseur du boolean "voitureExt" 
+	 * @return this.voitureExt
+	 */
 	public boolean getVoitureExt() {
 		return this.voitureExt;
 	}

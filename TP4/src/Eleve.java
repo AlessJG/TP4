@@ -60,7 +60,7 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Accesseur de la variable "prochaineLecon"
-	 * @return
+	 * @return this.prochaineLecon
 	 */
 	public Lecon getLecon() {
 		return this.prochaineLecon;
@@ -124,6 +124,8 @@ public class Eleve extends Personne {
 				return Activite.TypeActivite.LT;
 			case ET:
 				return Activite.TypeActivite.ET;
+			//Pour l'examen pratique: si une voiture extérieure est utilisée
+			//alors le type devient EPL
 			case EP:
 				if (voitureExt)
 	                return Activite.TypeActivite.EPL;
@@ -170,7 +172,7 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Accesseur de la variable "activite"
-	 * @return
+	 * @return this.activite
 	 */
 	public Activite getActivite() {
 		return this.activite;
@@ -178,7 +180,7 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Accesseur de la variable "activitePrevue"
-	 * @return
+	 * @return this.activitePrevue
 	 */
 	public boolean getActivitePrevue() {
 		return this.activitePrevue;
@@ -186,7 +188,7 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Accesseur de la variable "facture"
-	 * @return
+	 * @return this.facture
 	 */
 	public Paiement getFacture() {
 		return this.facture;
@@ -202,13 +204,13 @@ public class Eleve extends Personne {
 			return false;
 		}
 		else {
-			return this.facture.getStatut().equals(Paiement.Statut.Impaye);
+			return this.facture.getStatut().equals(Paiement.Statut.I);
 		}
 	}
 	
 	/**
 	 * Accesseur de la variable "numeroSAAQ"
-	 * @return
+	 * @return this.numSAAQ
 	 */
 	public String getNumSAAQ() {
 		return this.numeroSAAQ;
@@ -216,7 +218,6 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Mutateur de la variable "lecon"
-	 * @return
 	 */
 	public void setLecon(Lecon lecon) {
 		this.prochaineLecon = lecon;
@@ -224,7 +225,6 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Mutateur de la variable "setActivite"
-	 * @return
 	 */
 	public void setActivite(Activite activite) {
 		this.activite = activite;
@@ -232,7 +232,6 @@ public class Eleve extends Personne {
 	
 	/**
 	 * Mutateur de la variable "activitePrevue"
-	 * @param activitePrevue
 	 */
 	public void setActivitePrevue(boolean activitePrevue) {
 		this.activitePrevue = activitePrevue;
@@ -244,5 +243,17 @@ public class Eleve extends Personne {
 	 */
 	public void setDateFin(LocalDate date) {
 		this.dateFin = date;
+	}
+	
+	public void setFacture(Paiement paiement) {
+		this.facture = paiement;
+	}
+	
+	public LocalDate getDateInscription() {
+	    return this.dateInscription;
+	}
+
+	public LocalDate getDateFin() {
+	    return this.dateFin;
 	}
 }

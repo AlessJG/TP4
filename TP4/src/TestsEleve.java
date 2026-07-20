@@ -35,6 +35,9 @@ public class TestsEleve {
 		TestsEleve.testImpayeSansFacture();
 	}
 	
+	/**
+	 * On teste le constructeur
+	 */
 	public static void testEleveConstructeur() {
 
 	    Eleve e = new Eleve(
@@ -59,6 +62,9 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getLecon retourne la bonne valeur
+	 */
 	public static void testGetLecon() {
 
 	    Eleve e = new Eleve(
@@ -74,6 +80,9 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si le mutateur setLecon modifie la variable à la bonne valeur
+	 */
 	public static void testSetLecon() {
 
 	    Eleve e = new Eleve(
@@ -91,6 +100,10 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getTempsLecon retourne la bonne valeur
+	 * Cas: une lecon théorique dure 60 minutes
+	 */
 	public static void testTempsLecon60() {
 
 	    Eleve e = new Eleve(
@@ -108,6 +121,10 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getTempsLecon retourne la bonne valeur
+	 * Cas: une lecon pratique dure 90 minutes
+	 */
 	public static void testTempsLecon90() {
 
 	    Eleve e = new Eleve(
@@ -125,6 +142,10 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getTypeActivite retourne la bonne valeur
+	 * Cas: le type est LT
+	 */
 	public static void testTypeActiviteLT() {
 
 	    Eleve e = new Eleve(
@@ -144,6 +165,10 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getTypeActivite retourne la bonne valeur
+	 * Cas: le type est EP
+	 */
 	public static void testTypeActiviteEP() {
 
 	    Eleve e = new Eleve(
@@ -163,6 +188,10 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getTypeActivite retourne la bonne valeur
+	 * Cas: le type est EPL
+	 */
 	public static void testTypeActiviteEPL() {
 
 	    Eleve e = new Eleve(
@@ -182,6 +211,9 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si le mutateur setActivite modifie la variable à la bonne valeur
+	 */
 	public static void testSetActivite() {
 
 	    Eleve e = new Eleve(
@@ -210,6 +242,9 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si le mutateur setActivitePrevue modifie la variable à la bonne valeur
+	 */
 	public static void testSetActivitePrevue() {
 
 	    Eleve e = new Eleve(
@@ -227,6 +262,9 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getNumSAAQ retourne la bonne valeur
+	 */
 	public static void testGetNumSAAQ() {
 
 	    Eleve e = new Eleve(
@@ -245,6 +283,9 @@ public class TestsEleve {
 	    }
 	}
 	
+	/**
+	 * On teste si l
+	 */
 	public static void testImpayeSansFacture() {
 
 	    Eleve e = new Eleve(

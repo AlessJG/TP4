@@ -42,6 +42,14 @@ public class TestsActivite {
 		TestsActivite.testTypeActiviteNext();
 	}
 	
+	
+	/**
+	 * Fonction qui sert à faciliter la création d'une instance d'une Activite pour les tests
+	 * @param type
+	 * @param voitureExt
+	 * @param statut
+	 * @return
+	 */
 	public static Activite creerActivite(
 	        Activite.TypeActivite type,
 	        boolean voitureExt,
@@ -58,6 +66,9 @@ public class TestsActivite {
 	            statut);
 	}
 	
+	/**
+	 * On teste le constructeur
+	 */
 	public static void testActiviteConstructeur() {
 
 	    Activite a = creerActivite(
@@ -80,6 +91,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction calculerMontant si le type 
+	 * d'activité est LT
+	 */
 	public static void testCalculerMontantLT() {
 
 	    Activite a = creerActivite(
@@ -95,6 +110,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction calculerMontant si le type 
+	 * d'activité est LPA et l'élève utilise la voiture de l'auto-école
+	 */
 	public static void testCalculerMontantLPAEcole() {
 
 	    Activite a = creerActivite(
@@ -110,6 +129,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction calculerMontant si le type 
+	 * d'activité est LPA et l'élève utilise une location externer
+	 */
 	public static void testCalculerMontantLPAExterne() {
 
 	    Activite a = creerActivite(
@@ -125,6 +148,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction calculerMontant si le type 
+	 * d'activité est ET
+	 */
 	public static void testCalculerMontantET() {
 
 	    Activite a = creerActivite(
@@ -140,6 +167,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction calculerMontant si le type 
+	 * d'activité est EP
+	 */
 	public static void testCalculerMontantEP() {
 
 	    Activite a = creerActivite(
@@ -155,6 +186,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction calculerMontant si le type 
+	 * d'activité est EPL
+	 */
 	public static void testCalculerMontantEPL() {
 
 	    Activite a = creerActivite(
@@ -170,6 +205,9 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste l'accesseur getDate() retourne la bonne valeur
+	 */
 	public static void testGetDate() {
 
 	    Activite a = creerActivite(
@@ -185,6 +223,9 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que l'accesseur getHeure() retourne la bonne valeur
+	 */
 	public static void testGetHeure() {
 
 	    Activite a = creerActivite(
@@ -200,6 +241,9 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que l'accesseur getDuree() retourne la bonne valeur
+	 */
 	public static void testGetDuree() {
 
 	    Activite a = creerActivite(
@@ -215,6 +259,9 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que l'accesseur getType() retourne la bonne valeur
+	 */
 	public static void testGetType() {
 
 	    Activite a = creerActivite(
@@ -230,6 +277,9 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que l'accesseur getStatut() retourne la bonne valeur
+	 */
 	public static void testGetStatut() {
 
 	    Activite a = creerActivite(
@@ -245,6 +295,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que le mutateur setStatut() change la variable 
+	 * Statut à la bonne valeur
+	 */
 	public static void testSetStatut() {
 
 	    Activite a = creerActivite(
@@ -262,6 +316,9 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que le mutateur getNumSAAQ() retourne la bonne valeur
+	 */
 	public static void testGetNumSAAQ() {
 
 	    Activite a = creerActivite(
@@ -277,6 +334,9 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que le mutateur getVoitureExt() retourne la bonne valeur
+	 */
 	public static void testGetVoitureExt() {
 
 	    Activite a = creerActivite(
@@ -292,6 +352,10 @@ public class TestsActivite {
 	    }
 	}
 	
+	/**
+	 * On teste que le mutateur next() de l'enum TypeActivite change la variable 
+	 * TypeActivite à la bonne valeur
+	 */
 	public static void testTypeActiviteNext() {
 
 	    if (Activite.TypeActivite.LPA.next() ==

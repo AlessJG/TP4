@@ -19,15 +19,16 @@ public class Main {
 	
 	
 	/**
-	 * Main, exécute les tests de toutes les classes en commençant la fonction tests()
+	 * Main, exécute les tests de toutes les classes en commençant la fonction tests() 
+	 * et démarre l'application
 	 * @param args
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		tests();
+		//tests();
 		
-		/*AutoEcole autoEcole = new AutoEcole();
-		autoEcole.menuPrincipal();*/
+		AutoEcole autoEcole = new AutoEcole();
+		autoEcole.menuPrincipal();
 	}
 }

@@ -34,6 +34,9 @@ public class TestsDate {
 		TestsDate.testToStringDate();
 	}
 	
+	/**
+	 * On teste le constructeur
+	 */
 	public static void testDateConstructeur() {
 
 	    Date d = new Date(15);
@@ -47,6 +50,10 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction ajouterIndispo
+	 * Cas: on ajoute une indisponibilite a une date complètement disponible de base
+	 */
 	public static void testAjouterIndispo() {
 
 	    Date d = new Date(10);
@@ -63,6 +70,10 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction ajouterIndispo
+	 * Cas: on ajoute plusieurs indisponibilités qui se chevauche à une même date
+	 */
 	public static void testAjouterIndispoChevauchement() {
 
 	    Date d = new Date(10);
@@ -81,6 +92,9 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction enleverIndispo
+	 */
 	public static void testEnleverIndispo() {
 
 	    Date d = new Date(10);
@@ -96,6 +110,10 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction checkInsipo
+	 * Cas: la date est disponible
+	 */
 	public static void testCheckIndispoDisponible() {
 
 	    Date d = new Date(10);
@@ -108,6 +126,10 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction checkInsipo
+	 * Cas: la date est indisponible
+	 */
 	public static void testCheckIndispoIndisponible() {
 
 	    Date d = new Date(10);
@@ -124,6 +146,9 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getJour retourne la bonne valeur
+	 */
 	public static void testGetJour() {
 
 	    Date d = new Date(27);
@@ -136,6 +161,9 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getCreneauIndispo retourne les bonnes valeurs
+	 */
 	public static void testGetCreneauIndispo() {
 
 	    Date d = new Date(5);
@@ -153,6 +181,10 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getCreneauDispo retourne les bonnes valeurs
+	 * Cas: la date est complètement disponible
+	 */
 	public static void testGetCreneauDispoVide() {
 
 	    Date d = new Date(10);
@@ -171,6 +203,10 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getCreneauIndispo retourne les bonnes valeurs
+	 * Cas: la date contient une indisponibilité
+	 */
 	public static void testGetCreneauDispoUneReservation() {
 
 	    Date d = new Date(10);
@@ -191,6 +227,10 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getCreneauIndispo retourne les bonnes valeurs
+	 * Cas: la date contient deux indisponibilités
+	 */
 	public static void testGetCreneauDispoDeuxReservations() {
 
 	    Date d = new Date(10);
@@ -212,6 +252,9 @@ public class TestsDate {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction toString
+	 */
 	public static void testToStringDate() {
 
 	    Date d = new Date(10);

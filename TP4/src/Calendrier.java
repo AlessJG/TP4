@@ -1,9 +1,8 @@
-import java.io.*;
 import java.time.*;
 import java.util.*;
 
 public class Calendrier {
-	//format fichier calendrierXX.CSV -- ou XX est le numero du mois
+	//format fichier calendrierXX.CSV -- où XX est le numero du mois
 	//Date, heure1-duree(en min), heure2-duree, heure3-duree, ...
 	//1, 12:00-60, 14:00-90, ...
 	
@@ -68,12 +67,11 @@ public class Calendrier {
 			Date date = new Date(x);
 			this.dates.add(date);
 		}
-		GestionFichiers.ecrireCSV(nomFichier, calendrierString);
+		GestionFichiers.ecrire(nomFichier, calendrierString);
 	}
 	
 	/**
-	 * Fonction qui sert à obtenir la liste des dates (objets Date) disponibles (pour lesquelles 
-	 * "estIndispo" est false) de ce mois-ci
+	 * Fonction qui sert à obtenir la liste des dates (objets Date) disponibles de ce mois-ci
 	 * @return dispo, la liste
 	 */
 	public ArrayList<Date> getDisponibilites() {
@@ -103,19 +101,23 @@ public class Calendrier {
         
         Date[][] semaines = new Date[6][7];
 
+        //On affiche l'entête
         int semaine = 0;
         int colonne = afficherEntete(this.dates.get(0));
 
+        //On affiche les dates du mois formattées
         for (Date d : this.dates) {
         	if (!d.getCreneauDispo().isEmpty()) {
                 semaines[semaine][colonne] = d;
                 System.out.printf("%6d", d.getJour());
             } else {
+            	//Si une date est indisponible, son numéro n'est pas affiché
                 System.out.printf("%6s", "-");
             }
 
             colonne++;
 
+            //lorsqu'on arrive à la fin d'une semaine, on imprime son numéro et passe à la prochaine ligne
             if (colonne == 7) {
                 System.out.println(" (" + (semaine + 1) + ")");
                 colonne = 0;
@@ -138,7 +140,7 @@ public class Calendrier {
     /**
      * Fonction qui sert à afficher l'entête d'une semaine. Celui-ci contient les abbréviations des
      * noms des 7 jours de la semaine formattées, ainsi que le nombre d'espace à inclure avant la 
-     * date de début.
+     * date de début
      * @param start, la date (objet Date) de début, l'affichage commence à partir de celle-ci
      * @return espaces, le nombre d'espace
      */
@@ -186,6 +188,10 @@ public class Calendrier {
         }
     }
     
+    /**
+     * Accesseur pour la liste de dates (objets Date) du calendrier
+     * @return this.dates
+     */
     public ArrayList<Date> getDates(){
     	return this.dates;
     }

@@ -16,7 +16,7 @@ public class Date {
 	}
 	
 	/**
-	 * Fonction qui sert à ajouter un créneau d'indisponibilité à la liste de créneaux
+	 * Fonction qui sert à ajouter un créneau d'indisponibilité à la liste courante heuresIndispo
 	 * @param temps, l'heure de début du créneau
 	 * @param duree, la durée du créneau
 	 */
@@ -39,7 +39,7 @@ public class Date {
 	}
 	
 	/**
-	 * Fonction qui sert à enlever un créneau d'indisponibilité à la liste de créneaux
+	 * Fonction qui sert à enlever un créneau d'indisponibilité à la liste courante heuresIndispo
 	 * @param temps, l'heure de début du créneau
 	 */
 	public void enleverIndispo(LocalTime temps) {
@@ -50,8 +50,9 @@ public class Date {
 	
 	
 	/**
-	 * Fonction qui 
-	 * @return this.estIndispo
+	 * Fonction qui sert à vérifier s'il reste des
+	 * disponibilités à la date courante ou non
+	 * @return un boolean: true s'il reste des disponibilités, false sinon
 	 */
 	public boolean checkIndispo() {
 	    return getCreneauDispo().isEmpty();
@@ -78,7 +79,9 @@ public class Date {
 	 * une liste au format (heure de début, durée), puis retourne cette liste 
 	 * @return heuresDispo, la liste des créneaux de disponibilités
 	 */
-	//puisque heures oueverture = 12PM-8PM and min lecon = 1h + 15 min entre chaque eleves
+	//Note: les heures d'ouverture sont de 12PM-8PM et la durée 
+	//minimum d'une leçon est de 60 min (+ 15 min pour donner du temps de préparation 
+	//entre chaque eleves) donc 75min au total
 	public TreeMap<LocalTime, Duration> getCreneauDispo() {
 
 	    TreeMap<LocalTime, Duration> dispo = new TreeMap<>();
@@ -86,7 +89,7 @@ public class Date {
 	    LocalTime debut = LocalTime.of(12,0);
 	    LocalTime fermeture = LocalTime.of(20,0);
 
-	    for(LocalTime h : heuresIndispo.keySet()){
+	    for(LocalTime h : this.heuresIndispo.keySet()){
 
 	        Duration libre = Duration.between(debut,h);
 
@@ -94,7 +97,7 @@ public class Date {
 	            dispo.put(debut, libre);
 	        }
 
-	        debut = h.plus(heuresIndispo.get(h));
+	        debut = h.plus(this.heuresIndispo.get(h));
 	    }
 
 	    Duration dernier = Duration.between(debut, fermeture);

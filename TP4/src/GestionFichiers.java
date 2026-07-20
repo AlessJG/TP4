@@ -45,11 +45,11 @@ public class GestionFichiers {
     
     
     /**
-     * Fonction qui sert à ecrire dans un fichier CSV
-     * @param fichier, le path du fichier CSV 
+     * Fonction qui sert à remplacer le contenu d'un fichier par celui choisi
+     * @param fichier, le path du fichier 
      * @param texte, le texte à écrire dans le fichier
      */
-    public static void ecrireCSV(String fichier, String texte) {
+    public static void ecrire(String fichier, String texte) {
     	File f = new File(fichier);
 		if(!f.exists()) { 
 			try {
@@ -72,6 +72,11 @@ public class GestionFichiers {
 	    
     }
     
+    /**
+     * Fonction qui sert à ajouter un certain texte à un fichier CSV choisi
+     * @param fichier, le path du fichier CSV
+     * @param texte, le texte à ajotuer
+     */
     public static void ajouterCSV(String fichier, String texte) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fichier, true));
@@ -101,7 +106,7 @@ public class GestionFichiers {
 			String fElevesPrec = "./CSV/eleves/eleves" + 
 					 (LocalDate.now(Clock.systemUTC()).getYear() - 1) + ".csv";
 			ArrayList<String[]> elevesSPrec = lireCSV(fElevesPrec);
-			ecrireCSV(nomFichier, "NumSAAQ, MotDePasse, Nom, Prenom, Adresse, Telephone, Date, DateFin\n");
+			ecrire(nomFichier, "NumSAAQ, MotDePasse, Nom, Prenom, Adresse, Telephone, Date, DateFin\n");
 			
 			//Cas 1: on vient de créer l'app de l'auto école donc 
 			//elle n'a pas encore d'étudiant
@@ -133,7 +138,7 @@ public class GestionFichiers {
 						
 					}
 				}
-				ecrireCSV(nomFichier, s);
+				ecrire(nomFichier, s);
 				return eleves;
 			}
 		}
@@ -182,7 +187,7 @@ public class GestionFichiers {
 			String fActivitesPrec = "./CSV/activites/activites" + 
 					 (LocalDate.now(Clock.systemUTC()).getYear() - 1) + ".csv";
 			ArrayList<String[]> activiteSPrec = lireCSV(fActivitesPrec);
-			ecrireCSV(nomFichier, "ID_Activite, Type, NumSAAQ, Date, Heure, Duree, Montant, Statut, Plaques\n");
+			ecrire(nomFichier, "ID_Activite, Type, NumSAAQ, Date, Heure, Duree, Montant, Statut, Plaques\n");
 			
 			//Cas 1: on vient de créer l'app de l'auto école donc 
 			//elle n'a pas encore d'activites prevues
@@ -223,7 +228,7 @@ public class GestionFichiers {
 						ID++;
 					}
 				}
-				ecrireCSV(nomFichier, s);
+				ecrire(nomFichier, s);
 				return activites;
 			}
 		}
@@ -277,7 +282,7 @@ public class GestionFichiers {
 		    nouvS += String.join(",", s) + "\n";
 		}
 
-		ecrireCSV(nomFichier, nouvS);
+		ecrire(nomFichier, nouvS);
 	}
 	
 	/**
@@ -307,7 +312,162 @@ public class GestionFichiers {
 	        }
 	        nouvS += String.join(",", s) + "\n";
 		}
-		ecrireCSV(nomFichier, nouvS);
+		ecrire(nomFichier, nouvS);
+	}
+	
+	public static ArrayList<Paiement> facturesCSV(String nomFichier,
+            ArrayList<Eleve> eleves,
+            ArrayList<Activite> activites) {
+
+		ArrayList<String[]> facturesTab = lireCSV(nomFichier);
+		ArrayList<Paiement> factures = new ArrayList<>();
+		
+		if (facturesTab == null || facturesTab.isEmpty()) {
+		
+			ecrire(nomFichier,
+					"ID,NumeroUnique,NumSAAQ,Type,DateActivite,Montant,Statut,Methode\n");
+		
+			return factures;
+		}
+		
+		for (String[] ligne : facturesTab) {
+		
+			Eleve eleve = null;
+			Activite activite = null;
+			
+			for (Eleve e : eleves) {
+				if (e.getNumSAAQ().equals(ligne[2])) {
+					eleve = e;
+					break;
+				}
+			}
+		
+			for (Activite a : activites) {
+		
+				if (a.getNumSAAQ().equals(ligne[2])
+						&& a.getType().toString().equals(ligne[3])
+						&& a.getLocalDate().equals(LocalDate.parse(ligne[4]))) {
+		
+					activite = a;
+					break;
+				}
+			}
+		
+			Paiement.Methode methode = null;
+		
+			if (!ligne[7].isBlank())
+				methode = Paiement.Methode.valueOf(ligne[7]);
+		
+			Paiement paiement = new Paiement(
+					ligne[1],
+					Double.parseDouble(ligne[5]),
+					LocalDate.parse(ligne[4]),
+					eleve,
+					activite,
+					Paiement.Statut.valueOf(ligne[6]),
+					methode);
+		
+			factures.add(paiement);
+		}
+		
+		return factures;
+	}
+	
+	/**
+	 * Met à jour les informations d'un élève dans le fichier CSV.
+	 *
+	 * @param eleve l'élève à modifier
+	 * @param nomFichier le fichier elevesXXXX.csv
+	 */
+	public static void modifierEleveCSV(Eleve eleve, String nomFichier) {
+
+	    ArrayList<String[]> elevesTab = lireCSV(nomFichier);
+
+	    String nouveau =
+	            "NumSAAQ,MotDePasse,Nom,Prenom,Adresse,Telephone,DateInscription,DateFin,Lecon,ActivitePrevue\n";
+
+	    for (String[] ligne : elevesTab) {
+
+	        if (ligne[0].equals(eleve.getNumSAAQ())) {
+
+	            ligne[1] = eleve.getMotDePasse();
+	            ligne[2] = eleve.getNom();
+	            ligne[3] = eleve.getPrenom();
+
+	            // Ces getters doivent exister
+	            ligne[4] = eleve.getAdresse();
+	            ligne[5] = eleve.getNumTelephone();
+
+	            ligne[6] = eleve.getDateInscription().toString();
+
+	            if (eleve.getDateFin() != null)
+	                ligne[7] = eleve.getDateFin().toString();
+	            else
+	                ligne[7] = "";
+
+	            ligne[8] = eleve.getLecon().toString();
+	            ligne[9] = String.valueOf(eleve.getActivitePrevue());
+	        }
+
+	        nouveau += String.join(",", ligne) + "\n";
+	    }
+
+	    ecrire(nomFichier, nouveau);
+	}
+	
+	public static void ajouterFactureCSV(Paiement paiement,
+            String nomFichier) {
+
+		ArrayList<String[]> factures = lireCSV(nomFichier);
+
+		int id = factures.size() + 1;
+
+		String methode = "";
+
+		if (paiement.getMethode() != null)
+			methode = paiement.getMethode().toString();
+
+		String ligne ="\n"
+						+ id + ","
+						+ paiement.getNumeroUnique() + ","
+						+ paiement.getEleve().getNumSAAQ() + ","
+						+ paiement.getActivite().getType() + ","
+						+ paiement.getDate() + ","
+						+ paiement.getMontant() + ","
+						+ paiement.getStatut() + ","
+						+ methode;
+
+		ajouterCSV(nomFichier, ligne);
+	}
+	
+	public static void modifierFactureCSV(Paiement paiement,
+            String nomFichier) {
+
+		ArrayList<String[]> factures = lireCSV(nomFichier);
+
+		String nouveau =
+				"ID,NumeroUnique,NumSAAQ,Type,DateActivite,Montant,Statut,Methode\n";
+
+		int id = 1;
+
+		for (String[] ligne : factures) {
+
+			if (ligne[1].equals(paiement.getNumeroUnique())) {
+
+				ligne[5] = String.valueOf(paiement.getMontant());
+				ligne[6] = paiement.getStatut().toString();
+
+				if (paiement.getMethode() != null)
+					ligne[7] = paiement.getMethode().toString();
+				else
+					ligne[7] = "";
+			}
+
+			ligne[0] = String.valueOf(id++);
+			nouveau += String.join(",", ligne) + "\n";
+		}
+
+		ecrire(nomFichier, nouveau);
 	}
 	
 	/**
@@ -343,7 +503,7 @@ public class GestionFichiers {
 	        }
 	    }
 
-	    ecrireCSV(nomFichier, nouveau);
+	    ecrire(nomFichier, nouveau);
 	}
 	
 	/**
@@ -356,7 +516,7 @@ public class GestionFichiers {
 	    ArrayList<String[]> activitesTab = lireCSV(nomFichier);
 
 	    String nouvS =
-	        "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n";
+	        "ID_Activite,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n";
 
 	    int id = 1;
 
@@ -375,7 +535,7 @@ public class GestionFichiers {
 	        nouvS += String.join(",", s) + "\n";
 	    }
 
-	    ecrireCSV(nomFichier, nouvS);
+	    ecrire(nomFichier, nouvS);
 	}
 	
 	/**
@@ -403,7 +563,7 @@ public class GestionFichiers {
 			String s = String.join(",", sTab);
 			s += "\n";
 			
-			ecrireCSV(nomFichier, "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n" + s);
+			ecrire(nomFichier, "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n" + s);
 			
 			voiture = new Voiture(sTab[0], Integer.parseInt(sTab[2]), sTab[1], Double.parseDouble(sTab[3]), Integer.parseInt(sTab[4]), 
 								  Integer.parseInt(sTab[6]), Voiture.Etat.valueOf(sTab[5]));

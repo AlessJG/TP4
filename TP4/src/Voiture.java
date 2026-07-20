@@ -37,6 +37,7 @@ public final class Voiture {
 		this.kmAchat = kmAchat;
 		this.kilometrage = kilometrage;
 		this.etat = etat;
+		this.listeDepVoit = new LinkedList<>();
 	}
 	
 	/**
@@ -46,4 +47,76 @@ public final class Voiture {
 	public String getPlaque() {
 		return this.plaque;
 	}
+	
+	/**
+	 * Fonction qui sert à ajouter une depense (objet DepenseVoiture) à la liste de dépenses
+	 * @param depense, la dépense à ajouter
+	 */
+	public void ajouterDepense(DepenseVoiture depense) {
+	    this.listeDepVoit.add(depense);
+	}
+	
+	/**
+	 * Accesseur de la variable marque
+	 * @return this.marque
+	 */
+	public String getMarque() {
+	    return this.marque;
+	}
+	
+	/**
+	 * Accesseur de la variable annee
+	 * @return this.annee
+	 */
+	public int getAnnee() {
+	    return this.annee;
+	}
+	
+	/**
+	 * Accesseur de la variable prixAchat
+	 * @return this.prixAchat
+	 */
+	public double getPrixAchat() {
+	    return this.prixAchat;
+	}
+	
+	/**
+	 * Accesseur de la variable kmAchat
+	 * @return this.kmAchat
+	 */
+	public int getKmAchat() {
+	    return this.kmAchat;
+	}
+	
+	/**
+	 * Accesseur de la variable etat
+	 * @return this.etat
+	 */
+	public Etat getEtat() {
+	    return this.etat;
+	}
+	
+	/**
+	 * Accesseur de la variable kilometrage
+	 * @return this.kilometrage
+	 */
+	public int getKilometrage() {
+	    return kilometrage;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public LinkedList<DepenseVoiture> getListeDepVoit(){
+		return this.listeDepVoit;
+	}
 }
+ 
+
+
+  
+
+
+
+

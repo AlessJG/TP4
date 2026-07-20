@@ -33,6 +33,9 @@ public class TestsCalendrier {
 		TestsCalendrier.testGetDisponibilitesUneIndispo();
 	}
 	
+	/**
+	 * On teste le constructeur
+	 */
 	public static void testConstructeurCalendrier() {
 
 	    Calendrier c = new Calendrier();
@@ -45,6 +48,9 @@ public class TestsCalendrier {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction nouveauCalendrier
+	 */
 	public static void testNouveauCalendrier() {
 
 	    String fichier = "./CSV/calendriers/testCalendrier.csv";
@@ -66,6 +72,10 @@ public class TestsCalendrier {
 	    new File(fichier).delete();
 	}
 	
+	/**
+	 * On teste si l'accesseur getDisponibilites retourne les bonnes valeurs
+	 * Cas: toutes les dates sont disponibles
+	 */
 	public static void testGetDisponibilitesToutes() {
 
 	    Calendrier c = new Calendrier();
@@ -78,6 +88,10 @@ public class TestsCalendrier {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getDisponibilites retourne les bonnes valeurs
+	 * Cas: une des dates est indsiponible
+	 */
 	public static void testGetDisponibilitesUneIndispo() {
 
 	    Calendrier c = new Calendrier();
@@ -94,6 +108,9 @@ public class TestsCalendrier {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction afficherEntete
+	 */
 	public static void testAfficherEntete() {
 
 	    Calendrier c = new Calendrier();
@@ -108,6 +125,9 @@ public class TestsCalendrier {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction afficherCalendrierMois
+	 */
 	public static void testAfficherCalendrierMois() {
 
 	    Calendrier c = new Calendrier();
@@ -124,6 +144,9 @@ public class TestsCalendrier {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction afficherCalendrierSemaine
+	 */
 	public static void testAfficherCalendrierSemaine() {
 
 	    Calendrier c = new Calendrier();
@@ -142,6 +165,9 @@ public class TestsCalendrier {
 	    }
 	}
 	
+	/**
+	 * On teste si l'accesseur getDates retourne les bonnes valeurs
+	 */
 	public static void testGetDates() {
 
 	    Calendrier c = new Calendrier();
@@ -156,6 +182,10 @@ public class TestsCalendrier {
 	    }
 	}
 	
+	/**
+	 * On teste si la fonction afficherCalendrierMois retourne les bonnes semaines
+	 * Cas: une date est indisponible
+	 */
 	public static void testCalendrierJourComplet() {
 
 	    Calendrier c = new Calendrier();
@@ -172,6 +202,10 @@ public class TestsCalendrier {
 	        System.out.println("XX testCalendrierJourComplet échoué");
 	}
 	
+	/**
+	 * On teste si la fonction afficherCalendrierMois retourne les bonnes semaines
+	 * Cas: plusieurs dates ont des insiponibilités
+	 */
 	public static void testCalendrierPlusieursIndispo() {
 
 	    Calendrier c = new Calendrier();

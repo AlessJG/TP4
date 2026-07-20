@@ -10,6 +10,9 @@ public class TestsVoiture {
 		TestsVoiture.testGetPlaque();
 	}
 	
+	/**
+	 * On teste le constructeur
+	 */
 	public static void testConstructeurVoiture() {
 
 	    Voiture voiture = new Voiture(
@@ -28,6 +31,9 @@ public class TestsVoiture {
 	    }
 	}
 	
+	/**
+	 * On teste que l'accesseur getPlaque retourne la bonne valeur
+	 */
 	public static void testGetPlaque() {
 
 	    Voiture voiture = new Voiture(

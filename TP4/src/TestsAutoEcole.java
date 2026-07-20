@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.util.*;
 
 public class TestsAutoEcole {
@@ -23,6 +22,10 @@ public class TestsAutoEcole {
 		TestsAutoEcole.testAuthentifierEleveChampsVides();
 	}
 	
+	/**
+	 * On teste que l'accesseur et le gestionnaire des entrées
+	 * utilisateur retourne la bonne valeur
+	 */
 	public static void testGetInputNormal() {
 
 	    AutoEcole.scanner = new Scanner("Bonjour\n");
@@ -36,6 +39,11 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste que l'accesseur et le gestionnaire des entrées
+	 * utilisateur retourne bien un texte sans espaces 
+	 * inutiles avant et après celui-ci (trimmed)
+	 */
 	public static void testGetInputTrim() {
 
 	    AutoEcole.scanner = new Scanner("   Bonjour   \n");
@@ -49,9 +57,10 @@ public class TestsAutoEcole {
 	    }
 	}
 	
-	//Q: nom, prenom, adresse, telephone, saaq, mot de passe
-	//CSV: NumSAAQ, MotDePasse, Nom, Prenom, Adresse, Telephone, Date, DateFin
-	//Cons: LocalDate dateInscription, nom, prenom, adresse, numTelephone, numSAAQ, motDePasse
+
+	/**
+	 * On teste la fonction inscriptionEleve avec des informations valides
+	 */
 	public static void testInscriptionEleveValide() {
 
 	    AutoEcole.scanner = new Scanner(
@@ -75,6 +84,10 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction inscriptionEleve avec un numéro de téléphone invalide
+	 * (contient des lettres)
+	 */
 	public static void testInscriptionEleveTelephoneInvalide() {
 
 	    AutoEcole.scanner = new Scanner(
@@ -98,6 +111,9 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction inscriptionEleve avec un numéro SAAQ invalide
+	 */
 	public static void testInscriptionEleveSAAQInvalide() {
 
 	    AutoEcole.scanner = new Scanner(
@@ -120,6 +136,10 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction inscriptionEleve avec un numéro de téléphone invalide
+	 * (7 chiffres au lieu de 10)
+	 */
 	public static void testInscriptionEleveTelephoneLongueur() {
 
 	    AutoEcole.scanner = new Scanner(
@@ -142,6 +162,11 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction inscriptionEleve si l'élève répond que les
+	 * informations rentrées étaient incorrectes (devrait ne pas enregistrer ces
+	 * données et repartir la boucle de question)
+	 */
 	public static void testInscriptionEleveConfirmationNon() {
 
 	    AutoEcole.scanner = new Scanner(
@@ -175,6 +200,9 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction authentifierEleve avec des informations valides
+	 */
 	public static void testAuthentifierEleveValide() {
 
 	    AutoEcole autoEcole = new AutoEcole();
@@ -191,6 +219,9 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction authentifierEleve avec un mot de passe invalide
+	 */
 	public static void testAuthentifierEleveMotDePasseInvalide() {
 
 	    AutoEcole autoEcole = new AutoEcole();
@@ -207,6 +238,9 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction authentifierEleve avec un numéro SAAQ invalide
+	 */
 	public static void testAuthentifierEleveSAAQInvalide() {
 
 	    AutoEcole autoEcole = new AutoEcole();
@@ -223,6 +257,9 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction authentifierEleve avec un numéro SAAQ et un mot de passe invalides
+	 */
 	public static void testAuthentifierEleveDeuxIdentifiantsInvalides() {
 
 	    AutoEcole autoEcole = new AutoEcole();
@@ -239,6 +276,9 @@ public class TestsAutoEcole {
 	    }
 	}
 	
+	/**
+	 * On teste la fonction authentifierEleve si rien n'est entré
+	 */
 	public static void testAuthentifierEleveChampsVides() {
 
 	    AutoEcole autoEcole = new AutoEcole();

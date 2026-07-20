@@ -157,7 +157,7 @@ public class TestsGestionFichiers {
             fichier.delete();
         }
 
-        GestionFichiers.ecrireCSV(fichier.getPath(), "Nom,Age\nBobby,20");
+        GestionFichiers.ecrire(fichier.getPath(), "Nom,Age\nBobby,20");
 
         BufferedReader reader = new BufferedReader(new FileReader(fichier));
         String ligne = reader.readLine();
@@ -180,7 +180,7 @@ public class TestsGestionFichiers {
         pw.println("Ancien contenu");
         pw.close();
 
-        GestionFichiers.ecrireCSV(fichier.getPath(), "Nouveau contenu");
+        GestionFichiers.ecrire(fichier.getPath(), "Nouveau contenu");
 
         BufferedReader reader = new BufferedReader(new FileReader(fichier));
         String ligne = reader.readLine();
@@ -201,7 +201,7 @@ public class TestsGestionFichiers {
 
         String texte = "Nom,Age\nBobby,20\nBob,25";
 
-        GestionFichiers.ecrireCSV(fichier.getPath(), texte);
+        GestionFichiers.ecrire(fichier.getPath(), texte);
 
         BufferedReader reader = new BufferedReader(new FileReader(fichier));
 
@@ -227,7 +227,7 @@ public class TestsGestionFichiers {
 
         File fichier = new File("test4.csv");
 
-        GestionFichiers.ecrireCSV(fichier.getPath(), "");
+        GestionFichiers.ecrire(fichier.getPath(), "");
 
         if (fichier.exists() && fichier.length() == 0) {
             System.out.println("OO testEcrireCSVTexteVide réussi");
@@ -242,7 +242,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/testAjouter.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Nom,Prenom\n" +
             "Dupont,Jean\n"
@@ -293,7 +293,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/testPlusieurs.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Nom,Prenom\n"
         );
@@ -319,7 +319,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/testTexteVide.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Nom,Prenom\n" +
             "Dupont,Jean\n"
@@ -348,7 +348,7 @@ public class TestsGestionFichiers {
                 "NumSAAQ,MotDePasse,Nom,Prenom,Adresse,Telephone,Date,DateFin\n" +
                 "1234,mdp,Dupont,Jean,Montreal,5141234567,2025-01-01,\n";
 
-        GestionFichiers.ecrireCSV(fichier, texte);
+        GestionFichiers.ecrire(fichier, texte);
 
         ArrayList<Eleve> eleves = GestionFichiers.elevesCSV(fichier);
 
@@ -392,7 +392,7 @@ public class TestsGestionFichiers {
         String nouveau =
                 "./CSV/eleves/testNouvelle.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
                 ancien,
                 "NumSAAQ, MotDePasse, Nom, Prenom, Adresse, Telephone, Date, DateFin\n" +
                 "1111,abc,Dupont,Jean,Montreal,5141234567,2025-01-01,\n"
@@ -414,7 +414,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/eleves/testDateFin.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
                 fichier,
                 "NumSAAQ, MotDePasse, Nom, Prenom, Adresse, Telephone, Date, DateFin\n" +
                 "1111,abc,Dupont,Jean,Montreal,5141234567,2025-01-01,\n" +
@@ -436,7 +436,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/eleves/testVide.csv";
 
-        GestionFichiers.ecrireCSV(fichier, "");
+        GestionFichiers.ecrire(fichier, "");
 
         ArrayList<Eleve> eleves = GestionFichiers.elevesCSV(fichier);
 
@@ -461,7 +461,7 @@ public class TestsGestionFichiers {
         	    15000,
         	    Voiture.Etat.D);
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaques\n" +
             "1,EPL,1234,2026-07-15,09:00,60,50.0,NC,ABC123\n"
@@ -527,7 +527,7 @@ public class TestsGestionFichiers {
         	    15000,
         	    Voiture.Etat.D);
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             ancien,
             "ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaques\n" +
             "1,LPS,1234," + LocalDate.now().getYear() +
@@ -559,7 +559,7 @@ public class TestsGestionFichiers {
         	    15000,
         	    Voiture.Etat.D);
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaques\n" +
             "1,LPZ,1234,2026-07-15,09:00,90,50.0,NC,ABC123\n"
@@ -589,7 +589,7 @@ public class TestsGestionFichiers {
         	    15000,
         	    Voiture.Etat.D);
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaques\n" +
             "1,LT,1234,2026-07-15,09:00,60,50.0,C,XYZ999\n"
@@ -612,7 +612,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/activites/testRetirer.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaques\n" +
             "1,LPZ,1111,2026-07-15,09:00,90,50,NC,ABC123\n" +
@@ -638,7 +638,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/activites/testInexistant.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID_Activite,Type,NumSAAQ,Date,Heure,Duree,Montant,Statut,Plaques\n" +
                     "1,LPZ,1111,2026-01-01,09:00,90,50,NC,ABC123\n"
@@ -661,7 +661,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/activites/testVide.csv";
 
-        GestionFichiers.ecrireCSV(fichier, "");
+        GestionFichiers.ecrire(fichier, "");
 
         GestionFichiers.retirerActiviteCSV("1111", fichier);
 
@@ -680,7 +680,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,estIndispo,Creneau1,Creneau2,Creneau3\n" +
             "15,false,09:00-60,10:00-90,11:00-60\n"
@@ -709,7 +709,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,estIndispo,Creneau1,Creneau2\n" +
             "15,false,09:00-60,10:00-90\n"
@@ -736,7 +736,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,estIndispo,Creneau1,Creneau2\n" +
             "15,false,09:00-60,10:00-90\n"
@@ -762,7 +762,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,estIndispo,Creneau1\n" +
             "15,false,09:00-60\n"
@@ -789,7 +789,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,heure1-duree(en min)\n" +
             "15\n" +
@@ -819,7 +819,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier2.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,heure1-duree(en min)\n" +
             "20\n"
@@ -851,7 +851,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier3.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,heure1-duree(en min)\n" +
             "10\n" +
@@ -883,7 +883,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier4.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,heure1-duree(en min)\n" +
             "8,12:00-60\n"
@@ -910,7 +910,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/calendriers/testCalendrier5.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Date,heure1-duree(en min)\n" +
             "25\n"
@@ -943,7 +943,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/activites/testModifier.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
             "1,LT,1234,15,09:00,60,45.0,NC,ABC123\n" +
@@ -979,7 +979,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/activites/testModifier2.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
             "1,LT,1234,15,09:00,60,45.0,NC,ABC123\n"
@@ -1014,7 +1014,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/activites/testModifier3.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
             "1,LT,1234,15,09:00,60,45.0,NC,ABC123\n" +
@@ -1052,7 +1052,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/activites/testModifier4.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "ID,Type,SAAQ,Date,Heure,Duree,Montant,Statut,Plaque\n" +
             "5,LT,1234,15,09:00,60,45.0,NC,ABC123\n" +
@@ -1090,7 +1090,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/voitures/testVoiture.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n" +
             "Toyota,ABC123,2023,25000,0,D,15000\n"
@@ -1119,7 +1119,7 @@ public class TestsGestionFichiers {
         String nouveau =
             "./CSV/voitures/testNouvelle.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             ancien,
             "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n" +
             "Honda,XYZ999,2022,22000,1000,D,20000\n"
@@ -1143,7 +1143,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/voitures/testDerniere.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n" +
             "Toyota,AAA111,2022,20000,0,V,12000\n" +
@@ -1167,7 +1167,7 @@ public class TestsGestionFichiers {
 
         String fichier = "./CSV/voitures/testVide.csv";
 
-        GestionFichiers.ecrireCSV(
+        GestionFichiers.ecrire(
             fichier,
             "Marque,Plaque,Annee,Prix,KmAchat,Etat,Kms\n"
         );

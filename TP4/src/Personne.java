@@ -1,4 +1,3 @@
-import java.time.*;
 
 public abstract class Personne {
 	private String nom; //le nom de la personne
@@ -26,7 +25,7 @@ public abstract class Personne {
 	
 	/**
 	 * Accesseur de la variable "motDePasse"
-	 * @return
+	 * @return this.motDePasse
 	 */
 	protected String getMotDePasse() {
 		return this.motDePasse;
@@ -34,7 +33,7 @@ public abstract class Personne {
 	
 	/**
 	 * Accesseur de la variable "nom"
-	 * @return
+	 * @return this.nom
 	 */
 	public String getNom() {
 		return this.nom;
@@ -42,9 +41,17 @@ public abstract class Personne {
 	
 	/**
 	 * Accesseur de la variable "prenom"
-	 * @return
+	 * @return this.prenom
 	 */
 	public String getPrenom() {
 		return this.prenom;
+	}
+	
+	public String getAdresse() {
+	    return this.adresse;
+	}
+
+	public String getNumTelephone() {
+	    return this.numTelephone;
 	}
 }
